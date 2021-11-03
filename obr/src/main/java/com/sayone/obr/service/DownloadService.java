@@ -5,7 +5,10 @@ import com.sayone.obr.entity.DownloadEntity;
 import com.sayone.obr.repository.DownloadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -36,10 +39,21 @@ public class DownloadService {
             System.out.println("downloading.....");
             downloadRepository.save(downloads);
         }
+    }
 
-
-
-
+    public void uploadBook(MultipartFile file, String bookId, String userId) throws IOException {
+      Optional<DownloadEntity> optionalUpload = downloadRepository.findUploadArea(bookId,userId);
+      DownloadEntity findUpload = optionalUpload.get();
+      if(optionalUpload.isEmpty()){ throw new IllegalStateException("No book found to upload..");
+      }
+      else {
+          String path ="/home/akhildev/Desktop/obrnew/obr/BookUploads/" + bookId + ".pdf";
+          file.transferTo(new File(path));
+          findUpload.setBookLink(path);
+          downloadRepository.save(findUpload);
+      }
+//        DownloadEntity uploads = new DownloadEntity();
+//        uploads = downloadRepository.findUploadArea(bookId, userId);
 
     }
 }
