@@ -17,4 +17,8 @@ public interface DownloadRepository extends JpaRepository<DownloadEntity, Long> 
 
     @Query(value = "select * from downloads d where d.uid = ?1",nativeQuery = true)
     Optional<DownloadEntity> findByUserId(String userId);
+
+
+    @Query(value = "SELECT * FROM downloads d where d.uid=?2 and d.bid=?1", nativeQuery = true)
+    Optional<DownloadEntity> findUploadArea(String bookId, String userId);
 }

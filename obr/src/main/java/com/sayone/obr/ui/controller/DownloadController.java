@@ -9,10 +9,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("user")
@@ -35,4 +35,14 @@ public class DownloadController {
 
         return user.getUserId()+" "+user.getEmail() + "downloaded";
     }
+
+    @PostMapping("/book/upload/{bid}")
+    public void uploadBook(@RequestParam("file") MultipartFile file,
+                           @PathVariable(value = "bid") String bookId ) throws IOException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+        downloadService.uploadBook(file,bookId,user.getUserId());
+    }
+
 }
+

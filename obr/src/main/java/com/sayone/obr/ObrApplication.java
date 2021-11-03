@@ -24,8 +24,7 @@ public class ObrApplication {
 	}
 
 	@Bean(name = "AppProperties")
-	public AppProperties getProperties() {
+	public AppProperties getAppProperties() {
 		return new AppProperties();
 	}
-
 }

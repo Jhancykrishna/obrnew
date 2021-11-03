@@ -22,6 +22,18 @@ public class DownloadEntity implements Serializable {
 
     private long dno;
 
+    private String bookLink;
+
+    public String getBookLink() {
+        return bookLink;
+    }
+
+    public void setBookLink(String bookLink) {
+        this.bookLink = bookLink;
+    }
+
+
+
     public String getBid() {
         return bid;
     }
