@@ -1,5 +1,6 @@
 package com.sayone.obr.ui.controller;
 
+import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.model.request.PublisherDetailsRequestModel;
 import com.sayone.obr.model.response.PublisherRestModel;
 import com.sayone.obr.service.PublisherService;
@@ -27,9 +28,11 @@ public class PublisherController {
     }
 
     @PostMapping
-    public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) {
+    public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws Exception {
 
         PublisherRestModel returnValue = new PublisherRestModel();
+
+        if (publisherDetails.getFirstName().isEmpty()) throw new Exception(PublisherErrorMessages.MISSING_REQUIRED_FIELD.getPublisherErrorMessages());
 
         PublisherDto publisherDto = new PublisherDto();
         BeanUtils.copyProperties(publisherDetails, publisherDto);

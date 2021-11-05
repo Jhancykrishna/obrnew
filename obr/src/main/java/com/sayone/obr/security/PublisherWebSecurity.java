@@ -10,12 +10,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+public class PublisherWebSecurity extends WebSecurityConfigurerAdapter {
 
     private final PublisherService publisherService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public WebSecurity(PublisherService publisherService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public PublisherWebSecurity(PublisherService publisherService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.publisherService = publisherService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -23,7 +23,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll().anyRequest().authenticated().and().addFilter(getAuthenticationFilter()).addFilter(new AuthorizationFilter(authenticationManager())).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, PublisherSecurityConstants.SIGN_UP_URL).permitAll().anyRequest().authenticated().and().addFilter(getAuthenticationFilter()).addFilter(new PublisherAuthorizationFilter(authenticationManager())).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
@@ -32,9 +32,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(publisherService).passwordEncoder(bCryptPasswordEncoder);
     }
 
-    public AuthenticationFilter getAuthenticationFilter() throws Exception {
+    public PublisherAuthenticationFilter getAuthenticationFilter() throws Exception {
 
-        final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
+        final PublisherAuthenticationFilter filter = new PublisherAuthenticationFilter(authenticationManager());
         filter.setFilterProcessesUrl("/publisher/login");
         return filter;
     }

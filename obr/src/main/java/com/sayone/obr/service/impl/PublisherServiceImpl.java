@@ -1,14 +1,12 @@
 package com.sayone.obr.service.impl;
 
 import com.sayone.obr.entity.PublisherEntity;
-import com.sayone.obr.entity.UserEntity;
 import com.sayone.obr.repository.PublisherRepository;
 import com.sayone.obr.service.PublisherService;
-import com.sayone.obr.shared.Utils;
+import com.sayone.obr.shared.PublisherUtils;
 import com.sayone.obr.shared.dto.PublisherDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PublisherServiceImpl implements PublisherService {
@@ -28,7 +25,7 @@ public class PublisherServiceImpl implements PublisherService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    Utils utils;
+    PublisherUtils publisherUtils;
 
     @Override
     public PublisherDto getPublisher(String email) {
@@ -53,7 +50,7 @@ public class PublisherServiceImpl implements PublisherService {
 
         if(publisherRepository.findByEmail(publisher.getEmail()) != null) throw new RuntimeException("Record already exists");
 
-        String publicPublisherId = utils.generatePublisherId(30);
+        String publicPublisherId = publisherUtils.generatePublisherId(30);
         publisherEntity.setPublisherId(publicPublisherId);
 
         publisherEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(publisher.getPassword()));
@@ -116,4 +113,5 @@ public class PublisherServiceImpl implements PublisherService {
 
         return new User(publisherEntity.getEmail(), publisherEntity.getEncryptedPassword(), new ArrayList<>());
     }
+
 }

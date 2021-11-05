@@ -17,4 +17,5 @@ public interface PublisherService extends UserDetailsService {
     PublisherDto getPublisherByPublisherId(String publisherId);
 
     PublisherDto updatePublisher(String publisherId, PublisherDto publisher);
+
 }

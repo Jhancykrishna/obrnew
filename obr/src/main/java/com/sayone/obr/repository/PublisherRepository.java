@@ -10,4 +10,5 @@ public interface PublisherRepository extends JpaRepository<PublisherEntity, Long
     PublisherEntity findByEmail(String email);
 
     PublisherEntity findByPublisherId(String publisherId);
+
 }

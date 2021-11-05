@@ -56,4 +56,5 @@ public class PublisherDetailsRequestModel {
     public void setAddress(String address) {
         this.address = address;
     }
+
 }

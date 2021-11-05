@@ -2,7 +2,7 @@ package com.sayone.obr.security;
 
 import com.sayone.obr.SpringApplicationContext;
 
-public class SecurityConstants {
+public class PublisherSecurityConstants {
 
     public static final long EXPIRATION_TIME = 864000000;
     public static final String TOKEN_PREFIX = "Bearer";
@@ -11,7 +11,7 @@ public class SecurityConstants {
 
     public static String getTokenSecret() {
 
-        AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("AppProperties");
+        PublisherAppProperties appProperties = (PublisherAppProperties) SpringApplicationContext.getBean("AppProperties");
         return appProperties.getTokenSecret();
     }
 }
