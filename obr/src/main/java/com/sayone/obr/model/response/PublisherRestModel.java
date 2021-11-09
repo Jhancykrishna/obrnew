@@ -9,8 +9,17 @@ public class PublisherRestModel {
     private String firstName;
     private String lastName;
     private String email;
-    private int phoneNumber;
+    private Long phoneNumber;
     private String address;
+    private String publisher;
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -36,11 +45,11 @@ public class PublisherRestModel {
         this.email = email;
     }
 
-    public int getPhoneNumber() {
+    public Long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

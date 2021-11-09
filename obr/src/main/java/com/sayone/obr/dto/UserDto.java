@@ -18,6 +18,17 @@ public class UserDto implements Serializable {
     private String password;
     private long phoneNumber;
     private String userStatus;
+    private String encryptedPassword;
+    private String address;
+    private String publisher;
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
 
     public Long getId() {
         return Id;
@@ -82,5 +93,21 @@ public class UserDto implements Serializable {
 
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getEncryptedPassword() {
+        return encryptedPassword;
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

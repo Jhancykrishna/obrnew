@@ -2,7 +2,6 @@ package com.sayone.obr.entity;
 
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 
 @Entity
@@ -23,11 +22,19 @@ public class UserEntity implements Serializable {
     private String lastName;
     @Column(nullable = false, length = 120, unique = true)
     private String email;
-    @Column(nullable = false, length = 25)
-    private long phoneNumber;
     @Column(nullable = false)
     private String encryptedPassword;
+    @Column(nullable = false, length = 25)
+    private long phoneNumber;
 
+
+    @Column(nullable = false)
+    private String publisher;
+
+    @Column(length = 120)
+    private String address;
+
+    @Column
     private String userStatus;
 
     private String emailVerificationToken;
@@ -112,6 +119,23 @@ public class UserEntity implements Serializable {
 
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
+    }
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 }
 

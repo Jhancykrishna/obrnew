@@ -27,10 +27,4 @@ public class ObrApplication {
 	public AppProperties getProperties() {
 		return new AppProperties();
 	}
-	
-	@Bean(name = "PublisherAppProperties")
-	public PublisherAppProperties getAppProperties() {
-		return new PublisherAppProperties();
-	}
-
 }

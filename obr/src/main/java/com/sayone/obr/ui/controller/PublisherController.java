@@ -1,65 +1,75 @@
 package com.sayone.obr.ui.controller;
 
+import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.model.request.PublisherDetailsRequestModel;
 import com.sayone.obr.model.response.PublisherRestModel;
-import com.sayone.obr.service.PublisherService;
-import com.sayone.obr.shared.dto.PublisherDto;
+import com.sayone.obr.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("publisher")
+@RequestMapping
 public class PublisherController {
 
     @Autowired
-    PublisherService publisherService;
+    UserService userService;
 
-    @GetMapping("/{id}")
-    public PublisherRestModel getPublisher(@PathVariable String id) {
+    @GetMapping("/publisher/get")
+    public PublisherRestModel getPublisher() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
-        PublisherDto publisherDto = publisherService.getPublisherByPublisherId(id);
-        BeanUtils.copyProperties(publisherDto, returnValue);
+        UserDto userDto = userService.getPublisherById(user.getUserId());
+        BeanUtils.copyProperties(userDto, returnValue);
 
         return returnValue;
     }
 
-    @PostMapping
+    @PostMapping("publisher/signup")
     public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws Exception {
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
         if (publisherDetails.getFirstName().isEmpty()) throw new Exception(PublisherErrorMessages.MISSING_REQUIRED_FIELD.getPublisherErrorMessages());
 
-        PublisherDto publisherDto = new PublisherDto();
-        BeanUtils.copyProperties(publisherDetails, publisherDto);
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(publisherDetails, userDto);
 
-        PublisherDto createdPublisher = publisherService.createPublisher(publisherDto);
-        BeanUtils.copyProperties(createdPublisher, returnValue);
+        UserDto createdUser = userService.createUser(userDto);
+        BeanUtils.copyProperties(createdUser, returnValue);
 
         return returnValue;
     }
 
-    @PutMapping(path = "/{id}")
-    public PublisherRestModel updatePublisher(@PathVariable String id, @RequestBody PublisherDetailsRequestModel publisherDetails) {
+    @PutMapping("/publisher/update")
+    public PublisherRestModel updatePublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
-        PublisherDto publisherDto = new PublisherDto();
-        BeanUtils.copyProperties(publisherDetails, publisherDto);
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(publisherDetails, userDto);
 
-        PublisherDto updatedPublisher = publisherService.updatePublisher(id, publisherDto);
+        UserDto updatedPublisher = userService.updatePublisher(user.getUserId(), userDto);
         BeanUtils.copyProperties(updatedPublisher, returnValue);
 
         return returnValue;
     }
 
-    @DeleteMapping(path = "/{id}")
-    public void deletePublisher(@PathVariable String id) {
+    @DeleteMapping("/publisher/delete")
+    public void deletePublisher() {
 
-        publisherService.deletePublisher(id);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        userService.deletePublisher(user.getUserId());
     }
 }

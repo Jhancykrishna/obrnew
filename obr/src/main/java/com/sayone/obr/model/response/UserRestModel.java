@@ -2,19 +2,19 @@ package com.sayone.obr.model.response;
 
 public class UserRestModel {
 
-        private String userId;
         private String firstName;
         private String lastName;
         private String email;
         private long phoneNumber;
         private String userStatus;
+        private String publisher;
 
-        public String getUserId() {
-                return userId;
+        public String getPublisher() {
+                return publisher;
         }
 
-        public void setUserId(String userId) {
-                this.userId = userId;
+        public void setPublisher(String publisher) {
+                this.publisher = publisher;
         }
 
         public String getFirstName() {

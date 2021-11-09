@@ -6,8 +6,17 @@ public class PublisherDetailsRequestModel {
     private String lastName;
     private String email;
     private String password;
-    private int phoneNumber;
+    private long phoneNumber;
     private String address;
+    private String publisher;
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -41,11 +50,11 @@ public class PublisherDetailsRequestModel {
         this.password = password;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -56,5 +65,4 @@ public class PublisherDetailsRequestModel {
     public void setAddress(String address) {
         this.address = address;
     }
-
 }

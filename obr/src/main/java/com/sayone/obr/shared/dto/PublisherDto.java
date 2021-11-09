@@ -12,7 +12,7 @@ public class PublisherDto implements Serializable {
     private String lastName;
     private String email;
     private String password;
-    private int phoneNumber;
+    private long phoneNumber;
     private String address;
     private String encryptedPassword;
     private String emailVerificationToken;
@@ -66,11 +66,11 @@ public class PublisherDto implements Serializable {
         this.password = password;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

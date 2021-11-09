@@ -39,15 +39,27 @@ public class PublisherEntity implements Serializable {
     @Column
     private Boolean emailVerificationStatus = false;
 
+    @Column(nullable = false)
+    private String role = "publisher";
+
     public PublisherEntity() {
     }
 
-    public PublisherEntity(String firstName, String lastName, String email, int phoneNumber, String address) {
+    public PublisherEntity(String firstName, String lastName, String email, int phoneNumber, String address, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Long getId() {
