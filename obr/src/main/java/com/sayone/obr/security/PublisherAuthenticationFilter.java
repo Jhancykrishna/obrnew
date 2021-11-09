@@ -1,9 +1,10 @@
 package com.sayone.obr.security;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sayone.obr.SpringApplicationContext;
-import com.sayone.obr.dto.UserDto;
-import com.sayone.obr.model.request.UserLoginRequestModel;
-import com.sayone.obr.service.UserService;
+import com.sayone.obr.model.request.PublisherLoginRequestModel;
+import com.sayone.obr.service.PublisherService;
+import com.sayone.obr.shared.dto.PublisherDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,18 +22,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class PublisherAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    public PublisherAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
         try {
-            UserLoginRequestModel creds = new ObjectMapper().readValue(req.getInputStream(), UserLoginRequestModel.class);
+            PublisherLoginRequestModel creds = new ObjectMapper().readValue(req.getInputStream(), PublisherLoginRequestModel.class);
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
         }
@@ -45,14 +46,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
 
-        String userName = ((User)auth.getPrincipal()).getUsername();
+        String publisherName = ((User)auth.getPrincipal()).getUsername();
 
-        String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret()).compact();
+        String token = Jwts.builder().setSubject(publisherName).setExpiration(new Date(System.currentTimeMillis() + PublisherSecurityConstants.EXPIRATION_TIME)).signWith(SignatureAlgorithm.HS512, PublisherSecurityConstants.getTokenSecret()).compact();
 
-        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
-        UserDto userDto = userService.getUser(userName);
+        PublisherService publisherService = (PublisherService) SpringApplicationContext.getBean("publisherServiceImpl");
+        PublisherDto publisherDto = publisherService.getPublisher(publisherName);
 
-        res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-        res.addHeader("UserID", userDto.getUserId());
+        res.addHeader(PublisherSecurityConstants.HEADER_STRING, PublisherSecurityConstants.TOKEN_PREFIX + token);
+        res.addHeader("PublisherID", publisherDto.getPublisherId());
     }
 }

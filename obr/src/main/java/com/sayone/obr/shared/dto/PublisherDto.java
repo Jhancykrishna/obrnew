@@ -1,50 +1,37 @@
-package com.sayone.obr.dto;
-
-
+package com.sayone.obr.shared.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
+public class PublisherDto implements Serializable {
 
-public class UserDto implements Serializable {
-
-
-    private static final long serialVersionUID = 6473858950438988814L;
-    private Long Id;
-
-    private String userId;
+    private static final long serialVersionUID = 5733808691880507629L;
+    private Long id;
+    private String publisherId;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private long phoneNumber;
-    private String userStatus;
-    private String encryptedPassword;
     private String address;
-    private String publisher;
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+    private String encryptedPassword;
+    private String emailVerificationToken;
+    private Boolean emailVerificationStatus = false;
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
-
-    public String getUserId() {
-        return userId;
+    public String getPublisherId() {
+        return publisherId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setPublisherId(String publisherId) {
+        this.publisherId = publisherId;
     }
 
     public String getFirstName() {
@@ -87,12 +74,12 @@ public class UserDto implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUserStatus() {
-        return userStatus;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEncryptedPassword() {
@@ -103,11 +90,20 @@ public class UserDto implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public String getAddress() {
-        return address;
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
     }
+
+    public Boolean getEmailVerificationStatus() {
+        return emailVerificationStatus;
+    }
+
+    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
+        this.emailVerificationStatus = emailVerificationStatus;
+    }
+
 }

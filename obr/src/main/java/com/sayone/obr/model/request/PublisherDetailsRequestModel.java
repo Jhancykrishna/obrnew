@@ -1,13 +1,13 @@
 package com.sayone.obr.model.request;
 
-public class UserDetailsRequestModel {
+public class PublisherDetailsRequestModel {
 
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private long phoneNumber;
-    private String userStatus;
+    private String address;
     private String publisher;
 
     public String getPublisher() {
@@ -58,11 +58,11 @@ public class UserDetailsRequestModel {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUserStatus() {
-        return userStatus;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

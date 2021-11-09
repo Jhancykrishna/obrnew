@@ -1,13 +1,16 @@
-package com.sayone.obr.model.request;
+package com.sayone.obr.model.response;
 
-public class UserDetailsRequestModel {
+import com.sayone.obr.entity.PublisherEntity;
+
+import java.util.List;
+
+public class PublisherRestModel {
 
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
-    private long phoneNumber;
-    private String userStatus;
+    private Long phoneNumber;
+    private String address;
     private String publisher;
 
     public String getPublisher() {
@@ -42,27 +45,20 @@ public class UserDetailsRequestModel {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public long getPhoneNumber() {
+    public Long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUserStatus() {
-        return userStatus;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
+    public void setAddress(String address) {
+        this.address = address;
     }
+
 }
