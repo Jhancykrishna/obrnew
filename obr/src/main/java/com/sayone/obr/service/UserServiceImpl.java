@@ -1,11 +1,9 @@
 package com.sayone.obr.service;
 
 import com.sayone.obr.dto.UserDto;
-import com.sayone.obr.entity.PublisherEntity;
 import com.sayone.obr.entity.UserEntity;
 import com.sayone.obr.repository.UserRepository;
 import com.sayone.obr.shared.Utils;
-import com.sayone.obr.shared.dto.PublisherDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -15,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,10 +30,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto user) {
 
-//        if (userRepository.findByEmail(user.getEmail()) !=null) throw new RuntimeException("Record already exists");
+        if (userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("Record already exists");
+
 
         UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(user, userEntity );
+        BeanUtils.copyProperties(user, userEntity);
         String publicUserId = utils.generateUserId(30);
         userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -46,15 +44,15 @@ public class UserServiceImpl implements UserService {
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(storedUserDetails, returnValue);
-        return returnValue;
 
+        return returnValue;
     }
 
     @Override
     public UserDto getUser(String email) {
 
-        UserEntity userEntity= userRepository.findByEmail(email);
-        if(userEntity == null) throw new UsernameNotFoundException(email);
+        UserEntity userEntity = userRepository.findByEmail(email);
+        if (userEntity == null) throw new UsernameNotFoundException(email);
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
@@ -66,9 +64,9 @@ public class UserServiceImpl implements UserService {
 
         UserDto returnValue = new UserDto();
 
-        UserEntity userEntity = userRepository.findByPublisherId(userId, "true");
+        UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
-        if(userEntity == null) throw new IllegalStateException("Not Publisher");
+        if (userEntity == null) throw new IllegalStateException("Not Publisher");
 
         BeanUtils.copyProperties(userEntity, returnValue);
 
@@ -79,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updatePublisher(String userId, UserDto userDto) {
 
         UserDto returnValue = new UserDto();
-        UserEntity userEntity = userRepository.findByPublisherId(userId, "true");
+        UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
         if (userEntity == null) throw new IllegalStateException("Record not found");
 
@@ -94,7 +92,42 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deletePublisher(String userId) {
-        UserEntity userEntity = userRepository.findByPublisherId(userId, "true");
+        UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
+
+        if (userEntity == null) {
+            throw new IllegalStateException("Record not found");
+        }
+        userRepository.delete(userEntity);
+    }
+
+    @Override
+    public UserDto getAllPublishersByRole() {
+
+        UserEntity userEntity = userRepository.findAllByRole("publisher");
+        if (userEntity == null) throw new UsernameNotFoundException("publisher");
+
+        UserDto returnValue = new UserDto();
+        BeanUtils.copyProperties(userEntity, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
+    public UserDto getAllUsersByRole() {
+
+        UserEntity userEntity = userRepository.findAllByRole("user");
+        if (userEntity == null) throw new UsernameNotFoundException("user");
+
+        UserDto returnValue = new UserDto();
+        BeanUtils.copyProperties(userEntity, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+
+        UserEntity userEntity = userRepository.findByPublisherId(userId,"user");
 
         if (userEntity == null) {
             throw new IllegalStateException("Record not found");
@@ -105,7 +138,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email);
-        if(userEntity == null) throw new UsernameNotFoundException(email);
-        return new User(userEntity.getEmail(),userEntity.getEncryptedPassword(),new ArrayList<>());
+        if (userEntity == null) throw new UsernameNotFoundException(email);
+        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
     }
 }

@@ -13,4 +13,10 @@ public interface UserService extends UserDetailsService {
     UserDto updatePublisher(String userId, UserDto userDto);
 
     void deletePublisher(String userId);
+
+    UserDto getAllPublishersByRole();
+
+    UserDto getAllUsersByRole();
+
+    void deleteUser(String userId);
 }

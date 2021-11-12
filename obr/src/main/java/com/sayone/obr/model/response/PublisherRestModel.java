@@ -11,14 +11,14 @@ public class PublisherRestModel {
     private String email;
     private Long phoneNumber;
     private String address;
-    private String publisher;
+    private String role;
 
-    public String getPublisher() {
-        return publisher;
+    public String getRole() {
+        return role;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getFirstName() {
