@@ -8,14 +8,14 @@ public class PublisherDetailsRequestModel {
     private String password;
     private long phoneNumber;
     private String address;
-    private String publisher;
+    private String role;
 
-    public String getPublisher() {
-        return publisher;
+    public String getRole() {
+        return role;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getFirstName() {

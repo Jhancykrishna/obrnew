@@ -10,26 +10,23 @@ public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = -8985931244509056697L;
 
-
     @Id
     @GeneratedValue
     private Long Id;
     @Column(nullable = false, length = 50)
     private String userId;
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String firstName;
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String lastName;
     @Column(nullable = false, length = 120, unique = true)
     private String email;
     @Column(nullable = false)
     private String encryptedPassword;
-    @Column(nullable = false, length = 25)
+    @Column(length = 25)
     private long phoneNumber;
-
-
     @Column(nullable = false)
-    private String publisher;
+    private String role;
 
     @Column(length = 120)
     private String address;
@@ -38,7 +35,6 @@ public class UserEntity implements Serializable {
     private String userStatus;
 
     private String emailVerificationToken;
-    @Column
     private Boolean emailVerificationStatus = false;
 
     public Long getId() {
@@ -130,12 +126,12 @@ public class UserEntity implements Serializable {
         this.address = address;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getRole() {
+        return role;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
 

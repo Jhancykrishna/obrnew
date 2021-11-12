@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository <UserEntity,Long>{
     UserEntity findByEmail(String email);
 
-    @Query(value = "select * from user u where u.user_id = ?1 and u.publisher = ?2", nativeQuery = true)
-    UserEntity findByPublisherId(String userId, String publisher);
+    @Query(value = "select * from user u where u.user_id = ?1 and u.role = ?2", nativeQuery = true)
+    UserEntity findByPublisherId(String userId, String role);
+
+    @Query(value = "select * from user u where u.role = ?1", nativeQuery = true)
+    UserEntity findAllByRole(String role);
 }
