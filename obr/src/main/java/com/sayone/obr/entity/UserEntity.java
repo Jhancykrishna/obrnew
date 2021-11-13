@@ -145,4 +145,3 @@ public class UserEntity implements Serializable {
         this.book = book;
     }
 }
-
