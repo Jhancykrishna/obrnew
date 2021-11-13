@@ -3,6 +3,7 @@ package com.sayone.obr.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -26,6 +27,8 @@ public class UserEntity implements Serializable {
     private String encryptedPassword;
     @Column(nullable = false, length = 25)
     private long phoneNumber;
+    @OneToMany (mappedBy = "uid",fetch=FetchType.LAZY,orphanRemoval = false)
+    private List<BookEntity> book;
 
 
     @Column(nullable = false)
@@ -40,6 +43,14 @@ public class UserEntity implements Serializable {
     private String emailVerificationToken;
     @Column
     private Boolean emailVerificationStatus = false;
+
+    public List<BookEntity> getBook() {
+        return book;
+    }
+
+    public void setBook(List<BookEntity> book) {
+        this.book = book;
+    }
 
     public Long getId() {
         return Id;
