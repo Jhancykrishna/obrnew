@@ -3,26 +3,27 @@ package com.sayone.obr.entity;
 import javax.persistence.*;
 
 //import javax.persistence.Column;
-@Entity(name = "test")
+@Entity
 @Table(name = "book")
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long bookId;
-    //  @Column(nullable = false)
-  //  private long bookId;
-  //  @Column(nullable = false)
+    private Long bookId;
     private String bookName;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity uid;
   //  @Column(nullable = false)
     private String author;
+ //   private String userId;
     private String publisher;
     private String genre;
     private String bookStatus;
     private String bookLink;
-    private long yearOfPublication;
+    private Long yearOfPublication;
     private  String bookDescription;
-
-    public BookEntity(long bookId, String bookName, String author, String publisher, String genre, String bookStatus, String bookLink, long yearOfPublication, String bookDescription) {
+    public BookEntity(Long bookId, String bookName, String uid, String author, String publisher, String genre, String bookStatus, String bookLink, Long yearOfPublication, String bookDescription) {
         this.bookId= bookId;
         this.bookName = bookName;
         this.author = author;
@@ -38,11 +39,19 @@ public class BookEntity {
     public BookEntity() {
     }
 
-    public long getBookId() {
+    public UserEntity getUid() {
+        return uid;
+    }
+
+    public void setUid(UserEntity uid) {
+        this.uid = uid;
+    }
+
+    public Long getBookId() {
         return bookId;
     }
 
-    public void setBookId(long bookId) {
+    public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
 
@@ -98,7 +107,7 @@ public class BookEntity {
         return yearOfPublication;
     }
 
-    public void setYearOfPublication(long yearOfPublication) {
+    public void setYearOfPublication(Long yearOfPublication) {
         this.yearOfPublication = yearOfPublication;
     }
 

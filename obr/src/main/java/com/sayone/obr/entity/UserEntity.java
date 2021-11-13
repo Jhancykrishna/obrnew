@@ -3,6 +3,7 @@ package com.sayone.obr.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -10,23 +11,28 @@ public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = -8985931244509056697L;
 
+
     @Id
     @GeneratedValue
     private Long Id;
     @Column(nullable = false, length = 50)
     private String userId;
-    @Column(length = 50)
+    @Column(nullable = false, length = 50)
     private String firstName;
-    @Column(length = 50)
+    @Column(nullable = false, length = 50)
     private String lastName;
     @Column(nullable = false, length = 120, unique = true)
     private String email;
     @Column(nullable = false)
     private String encryptedPassword;
-    @Column(length = 25)
+    @Column(nullable = false, length = 25)
     private long phoneNumber;
+    @OneToMany (mappedBy = "uid",fetch=FetchType.LAZY,orphanRemoval = false)
+    private List<BookEntity> book;
+
+
     @Column(nullable = false)
-    private String role;
+    private String publisher;
 
     @Column(length = 120)
     private String address;
@@ -35,7 +41,16 @@ public class UserEntity implements Serializable {
     private String userStatus;
 
     private String emailVerificationToken;
+    @Column
     private Boolean emailVerificationStatus = false;
+
+    public List<BookEntity> getBook() {
+        return book;
+    }
+
+    public void setBook(List<BookEntity> book) {
+        this.book = book;
+    }
 
     public Long getId() {
         return Id;
@@ -126,12 +141,12 @@ public class UserEntity implements Serializable {
         this.address = address;
     }
 
-    public String getRole() {
-        return role;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 }
 
