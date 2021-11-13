@@ -3,7 +3,7 @@ package com.sayone.obr.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -11,28 +11,23 @@ public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = -8985931244509056697L;
 
-
     @Id
     @GeneratedValue
     private Long Id;
-    @Column(nullable = false, length = 50)
+    @Column(name = "user_id", nullable = false, length = 50)
     private String userId;
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String firstName;
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String lastName;
     @Column(nullable = false, length = 120, unique = true)
     private String email;
     @Column(nullable = false)
     private String encryptedPassword;
-    @Column(nullable = false, length = 25)
+    @Column(length = 25)
     private long phoneNumber;
-    @OneToMany (mappedBy = "uid",fetch=FetchType.LAZY,orphanRemoval = false)
-    private List<BookEntity> book;
-
-
     @Column(nullable = false)
-    private String publisher;
+    private String role;
 
     @Column(length = 120)
     private String address;
@@ -40,16 +35,25 @@ public class UserEntity implements Serializable {
     @Column
     private String userStatus;
 
-    private String emailVerificationToken;
-    @Column
-    private Boolean emailVerificationStatus = false;
+    @OneToMany(fetch = FetchType.EAGER,mappedBy="uid",cascade = CascadeType.ALL)
+    private Set<BookEntity> books;
 
-    public List<BookEntity> getBook() {
-        return book;
+    public UserEntity() {
+
+        super();
     }
 
-    public void setBook(List<BookEntity> book) {
-        this.book = book;
+    public UserEntity(String userId, String firstName, String lastName, String email, String encryptedPassword, long phoneNumber, String role, String address, String userStatus, Set<BookEntity> books) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.address = address;
+        this.userStatus = userStatus;
+        this.books = books;
     }
 
     public Long getId() {
@@ -100,22 +104,6 @@ public class UserEntity implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public String getEmailVerificationToken() {
-        return emailVerificationToken;
-    }
-
-    public void setEmailVerificationToken(String emailVerificationToken) {
-        this.emailVerificationToken = emailVerificationToken;
-    }
-
-    public Boolean getEmailVerificationStatus() {
-        return emailVerificationStatus;
-    }
-
-    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
-        this.emailVerificationStatus = emailVerificationStatus;
-    }
-
     public long getPhoneNumber() {
         return phoneNumber;
     }
@@ -141,12 +129,20 @@ public class UserEntity implements Serializable {
         this.address = address;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getRole() {
+        return role;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Set<BookEntity> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<BookEntity> books) {
+        this.books = books;
     }
 }
 
