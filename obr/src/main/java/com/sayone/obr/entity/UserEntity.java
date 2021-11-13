@@ -3,6 +3,7 @@ package com.sayone.obr.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -13,7 +14,7 @@ public class UserEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long Id;
-    @Column(nullable = false, length = 50)
+    @Column(name = "user_id", nullable = false, length = 50)
     private String userId;
     @Column(length = 50)
     private String firstName;
@@ -34,8 +35,26 @@ public class UserEntity implements Serializable {
     @Column
     private String userStatus;
 
-    private String emailVerificationToken;
-    private Boolean emailVerificationStatus = false;
+    @OneToMany(fetch = FetchType.EAGER,mappedBy="uid",cascade = CascadeType.ALL)
+    private Set<BookEntity> book;
+
+    public UserEntity() {
+
+        super();
+    }
+
+    public UserEntity(String userId, String firstName, String lastName, String email, String encryptedPassword, long phoneNumber, String role, String address, String userStatus, Set<BookEntity> book) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.address = address;
+        this.userStatus = userStatus;
+        this.book = book;
+    }
 
     public Long getId() {
         return Id;
@@ -85,22 +104,6 @@ public class UserEntity implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public String getEmailVerificationToken() {
-        return emailVerificationToken;
-    }
-
-    public void setEmailVerificationToken(String emailVerificationToken) {
-        this.emailVerificationToken = emailVerificationToken;
-    }
-
-    public Boolean getEmailVerificationStatus() {
-        return emailVerificationStatus;
-    }
-
-    public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
-        this.emailVerificationStatus = emailVerificationStatus;
-    }
-
     public long getPhoneNumber() {
         return phoneNumber;
     }
@@ -132,6 +135,14 @@ public class UserEntity implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<BookEntity> getBook() {
+        return book;
+    }
+
+    public void setBook(Set<BookEntity> book) {
+        this.book = book;
     }
 }
 

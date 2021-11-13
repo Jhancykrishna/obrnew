@@ -2,27 +2,38 @@ package com.sayone.obr.entity;
 
 import javax.persistence.*;
 
-//import javax.persistence.Column;
-@Entity(name = "test")
+@Entity
 @Table(name = "book")
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long bookId;
-    //  @Column(nullable = false)
-  //  private long bookId;
-  //  @Column(nullable = false)
+    @Column(nullable = false)
     private String bookName;
-  //  @Column(nullable = false)
+    @Column(nullable = false)
     private String author;
+    @Column(nullable = false)
     private String publisher;
+    @Column(nullable = false)
     private String genre;
+    @Column(nullable = false)
     private String bookStatus;
+    @Column
     private String bookLink;
+    @Column(nullable = false)
     private long yearOfPublication;
-    private  String bookDescription;
+    @Column(nullable = false)
+    private String bookDescription;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity uid;
 
-    public BookEntity(long bookId, String bookName, String author, String publisher, String genre, String bookStatus, String bookLink, long yearOfPublication, String bookDescription) {
+    public BookEntity() {
+
+        super();
+    }
+
+    public BookEntity(long bookId, String bookName, String author, String publisher, String genre, String bookStatus, String bookLink, long yearOfPublication, String bookDescription, UserEntity uid) {
         this.bookId= bookId;
         this.bookName = bookName;
         this.author = author;
@@ -32,10 +43,7 @@ public class BookEntity {
         this.bookLink = bookLink;
         this.yearOfPublication = yearOfPublication;
         this.bookDescription = bookDescription;
-    }
-
-
-    public BookEntity() {
+        this.uid = uid;
     }
 
     public long getBookId() {
@@ -108,6 +116,14 @@ public class BookEntity {
 
     public void setBookDescription(String bookDescription) {
         this.bookDescription = bookDescription;
+    }
+
+    public UserEntity getUid() {
+        return uid;
+    }
+
+    public void setUid(UserEntity uid) {
+        this.uid = uid;
     }
 
     @Override
