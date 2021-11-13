@@ -40,7 +40,7 @@ public class PublisherEntity implements Serializable {
     private Boolean emailVerificationStatus = false;
 
     @Column(nullable = false)
-    private String role = "publisher";
+    private String role;
 
     public PublisherEntity() {
     }

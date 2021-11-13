@@ -41,8 +41,8 @@ public class PublisherController {
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(publisherDetails, userDto);
 
-        UserDto createdUser = userService.createUser(userDto);
-        BeanUtils.copyProperties(createdUser, returnValue);
+        UserDto createdPublisher = userService.createUser(userDto);
+        BeanUtils.copyProperties(createdPublisher, returnValue);
 
         return returnValue;
     }
