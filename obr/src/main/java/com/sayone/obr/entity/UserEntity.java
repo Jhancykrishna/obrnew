@@ -36,14 +36,14 @@ public class UserEntity implements Serializable {
     private String userStatus;
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy="uid",cascade = CascadeType.ALL)
-    private Set<BookEntity> books;
+    private Set<BookEntity> book;
 
     public UserEntity() {
 
         super();
     }
 
-    public UserEntity(String userId, String firstName, String lastName, String email, String encryptedPassword, long phoneNumber, String role, String address, String userStatus, Set<BookEntity> books) {
+    public UserEntity(String userId, String firstName, String lastName, String email, String encryptedPassword, long phoneNumber, String role, String address, String userStatus, Set<BookEntity> book) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,7 +53,7 @@ public class UserEntity implements Serializable {
         this.role = role;
         this.address = address;
         this.userStatus = userStatus;
-        this.books = books;
+        this.book = book;
     }
 
     public Long getId() {
@@ -137,12 +137,11 @@ public class UserEntity implements Serializable {
         this.role = role;
     }
 
-    public Set<BookEntity> getBooks() {
-        return books;
+    public Set<BookEntity> getBook() {
+        return book;
     }
 
-    public void setBooks(Set<BookEntity> books) {
-        this.books = books;
+    public void setBook(Set<BookEntity> book) {
+        this.book = book;
     }
 }
-

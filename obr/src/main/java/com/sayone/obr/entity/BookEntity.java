@@ -2,28 +2,38 @@ package com.sayone.obr.entity;
 
 import javax.persistence.*;
 
-//import javax.persistence.Column;
 @Entity
 @Table(name = "book")
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long bookId;
+    private long bookId;
+    @Column(nullable = false)
     private String bookName;
-
+    @Column(nullable = false)
+    private String author;
+    @Column(nullable = false)
+    private String publisher;
+    @Column(nullable = false)
+    private String genre;
+    @Column(nullable = false)
+    private String bookStatus;
+    @Column
+    private String bookLink;
+    @Column(nullable = false)
+    private long yearOfPublication;
+    @Column(nullable = false)
+    private String bookDescription;
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity uid;
-  //  @Column(nullable = false)
-    private String author;
- //   private String userId;
-    private String publisher;
-    private String genre;
-    private String bookStatus;
-    private String bookLink;
-    private Long yearOfPublication;
-    private  String bookDescription;
-    public BookEntity(Long bookId, String bookName, String uid, String author, String publisher, String genre, String bookStatus, String bookLink, Long yearOfPublication, String bookDescription) {
+
+    public BookEntity() {
+
+        super();
+    }
+
+    public BookEntity(long bookId, String bookName, String author, String publisher, String genre, String bookStatus, String bookLink, long yearOfPublication, String bookDescription, UserEntity uid) {
         this.bookId= bookId;
         this.bookName = bookName;
         this.author = author;
@@ -33,25 +43,14 @@ public class BookEntity {
         this.bookLink = bookLink;
         this.yearOfPublication = yearOfPublication;
         this.bookDescription = bookDescription;
-    }
-
-
-    public BookEntity() {
-    }
-
-    public UserEntity getUid() {
-        return uid;
-    }
-
-    public void setUid(UserEntity uid) {
         this.uid = uid;
     }
 
-    public Long getBookId() {
+    public long getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 
@@ -107,7 +106,7 @@ public class BookEntity {
         return yearOfPublication;
     }
 
-    public void setYearOfPublication(Long yearOfPublication) {
+    public void setYearOfPublication(long yearOfPublication) {
         this.yearOfPublication = yearOfPublication;
     }
 
@@ -117,6 +116,14 @@ public class BookEntity {
 
     public void setBookDescription(String bookDescription) {
         this.bookDescription = bookDescription;
+    }
+
+    public UserEntity getUid() {
+        return uid;
+    }
+
+    public void setUid(UserEntity uid) {
+        this.uid = uid;
     }
 
     @Override

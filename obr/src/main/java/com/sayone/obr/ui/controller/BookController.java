@@ -2,7 +2,6 @@ package com.sayone.obr.ui.controller;
 import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.service.BookService;
-import com.sayone.obr.service.PublisherService;
 import com.sayone.obr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +21,7 @@ public class BookController {
 
     @Autowired
     BookService bookService;
+
     @Autowired
     UserService userService;
 
@@ -39,40 +39,41 @@ public class BookController {
     }
 //get book by id
     @GetMapping("/books/{bId}")
-    public Optional<BookEntity> getBook(@PathVariable Long bId){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserDto user = userService.getUser(auth.getName());
-        return bookService.getBook(bId);
-
+    public Optional<BookEntity> getBook(@PathVariable String bId){
+        return bookService.getBook(Long.parseLong(bId));
 
     }
 //post a book
     @PostMapping("/book")
-    public BookEntity addBook(@RequestBody BookEntity books){
+    public BookEntity addBook(@RequestBody BookEntity books) throws Exception {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
-        return bookService.addBook(books);
+
+        return bookService.addBook(books,user.getId());
     }
 //update a book
     @PutMapping("/books")
-    public BookEntity updateBook(@RequestBody BookEntity books) {
-        return this.bookService.updateBook(books);
-    }
-
-
-//delete a book
-
-    @DeleteMapping("/books/{bId}")
-    public ResponseEntity<HttpStatus>deleteBook(@PathVariable Long bId ){
+    public BookEntity updateBook(@RequestBody BookEntity books) throws Exception {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
-            try{
-                bookService.deleteBook(bId);
-                return new ResponseEntity<>(HttpStatus.OK);
-            }catch (Exception e){
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+
+        return this.bookService.updateBook(books, user.getId());
+    }
+
+    @DeleteMapping("/books/{bId}")
+    public ResponseEntity<HttpStatus>deleteBook(@PathVariable Long bId){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        try{
+            bookService.deleteBook(bId, user.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
     @PostMapping("/book/upload/{bid}")
@@ -87,7 +88,6 @@ public class BookController {
     public void deleteBookUpload(@PathVariable(value = "bid") Long bookId) throws IOException{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
-        bookService.deleteBookUpload(bookId);
+        bookService.deleteBookUpload(bookId, user.getId());
     }
-
 }
