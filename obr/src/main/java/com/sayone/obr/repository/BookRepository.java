@@ -25,8 +25,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
   @Query(value = "SELECT * FROM book b where b.book_id=?1", nativeQuery = true)
   Optional<BookEntity> findUploadArea(Long bookId) ;
 
-  @Query(value = "SELECT DISTINCT FROM book b where b.book_id=?1", nativeQuery = true)
-  @QueryHints(value = @QueryHint(name = HINT_PASS_DISTINCT_THROUGH, value = "false"))
+  @Query(value = "SELECT * FROM book b where b.book_id=?1", nativeQuery = true)
   Optional<BookEntity> findByBookId(Long bId);
 
   @Query(value = "SELECT * FROM book b where b.book_id=?1", nativeQuery = true)

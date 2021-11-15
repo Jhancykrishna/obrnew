@@ -89,7 +89,7 @@ public class BookServiceImpl implements BookService {
         if (optionalUpload.isEmpty()) {
             throw new IllegalStateException("No book found to upload..");
         } else {
-            String path = "/mnt/3160CFF84E83C8AD/SayOne/IDEs/Linux/Java Projects/obr2/obrnew/obr/BookUpload/" + bookId + ".pdf";
+            String path = "/home/akhildev/Desktop/obr3/obrnew/obr/BookUpload/" + bookId + ".pdf";
             file.transferTo(new File(path));
             findUpload.setBookLink(path);
             bookRepository.save(findUpload);
@@ -111,7 +111,7 @@ public class BookServiceImpl implements BookService {
         if (Objects.equals(pathCheck, "") || Objects.equals(pathCheck, "deleted..")) {
             System.out.println("No files to delete");
         } else {
-            Path path = Path.of ("/mnt/3160CFF84E83C8AD/SayOne/IDEs/Linux/Java Projects/obr2/obrnew/obr/BookUpload/" + bookId + ".pdf");
+            Path path = Path.of ("/home/akhildev/Desktop/obr3/obrnew/obr/BookUpload/" + bookId + ".pdf");
             Files.delete((java.nio.file.Path) path);
             findDelete.setBookLink("deleted..");
             System.out.println("deleted successfully");
