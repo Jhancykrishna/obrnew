@@ -2,7 +2,9 @@ package com.sayone.obr.service.impl;
 
 import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.ErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
+import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.repository.UserRepository;
 import com.sayone.obr.service.UserService;
 import com.sayone.obr.shared.Utils;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,14 +32,19 @@ public class UserServiceImpl implements UserService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
+//user
     @Override
     public UserDto createUser(UserDto user) {
 
-        if (userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("Record already exists");
-
+        if (userRepository.findByEmail(user.getEmail()) !=null)
+            throw new UserServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
 
         UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(user, userEntity);
+        BeanUtils.copyProperties(user, userEntity );
+
+//        userEntity.setUserId("testUser");
+//        userEntity.setEncryptedPassword("test");
+
         String publicUserId = utils.generateUserId(30);
         userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -46,20 +54,54 @@ public class UserServiceImpl implements UserService {
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(storedUserDetails, returnValue);
-
         return returnValue;
+
     }
 
     @Override
     public UserDto getUser(String email) {
 
-        UserEntity userEntity = userRepository.findByEmail(email);
-        if (userEntity == null) throw new UsernameNotFoundException(email);
+        UserEntity userEntity= userRepository.findByEmail(email);
+        if(userEntity == null) throw new UsernameNotFoundException(email);
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
         return returnValue;
     }
+
+    @Override
+    public UserDto getUserByUserId(String userId)
+    {
+        UserDto returnValue = new UserDto();
+        UserEntity userEntity= userRepository.getUserByUserId(userId);
+        if(userEntity== null) throw new UsernameNotFoundException(userId);
+        BeanUtils.copyProperties(userEntity,returnValue);
+        return returnValue;
+
+    }
+
+
+
+    @Override
+    public UserDto updateUser( String userId, UserDto user) {
+        UserDto returnValue = new UserDto();
+        Optional<UserEntity> userEntity = userRepository.findByUserId(userId);
+        if(userEntity.isEmpty()) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        userEntity.get().setFirstName(user.getFirstName());
+        userEntity.get().setLastName(user.getLastName());
+        userEntity.get().setUserStatus(user.getUserStatus());
+        UserEntity updatedUserDetails = userRepository.save(userEntity.get());
+        BeanUtils.copyProperties(updatedUserDetails, returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public void deleteUserById(String userId){
+        userRepository.deleteByUserId(userId);
+    }
+
+    //publisher,admin
 
     @Override
     public UserDto getPublisherById(String userId) {
