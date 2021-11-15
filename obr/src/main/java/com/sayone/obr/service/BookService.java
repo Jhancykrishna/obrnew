@@ -15,4 +15,6 @@ public interface BookService {
      void deleteBook(Long bId, Long id) throws Exception;
      void uploadBook(MultipartFile file, Long bookId) throws IOException;
      void deleteBookUpload(Long bookId, Long id) throws IOException;
+
+    void deletePostedBookByAdmin(Long bId) throws Exception;
 }

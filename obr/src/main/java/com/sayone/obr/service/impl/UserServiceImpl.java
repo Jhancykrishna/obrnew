@@ -1,8 +1,10 @@
-package com.sayone.obr.service;
+package com.sayone.obr.service.impl;
 
 import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.repository.UserRepository;
+import com.sayone.obr.service.UserService;
 import com.sayone.obr.shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
-        if (userEntity == null) throw new IllegalStateException("Not Publisher");
+        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
         BeanUtils.copyProperties(userEntity, returnValue);
 
@@ -95,7 +97,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
         if (userEntity == null) {
-            throw new IllegalStateException("Record not found");
+            throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
         }
         userRepository.delete(userEntity);
     }
@@ -104,7 +106,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getAllPublishersByRole() {
 
         UserEntity userEntity = userRepository.findAllByRole("publisher");
-        if (userEntity == null) throw new UsernameNotFoundException("publisher");
+        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
@@ -116,7 +118,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getAllUsersByRole() {
 
         UserEntity userEntity = userRepository.findAllByRole("user");
-        if (userEntity == null) throw new UsernameNotFoundException("user");
+        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(userEntity, returnValue);
@@ -129,9 +131,8 @@ public class UserServiceImpl implements UserService {
 
         UserEntity userEntity = userRepository.findByPublisherId(userId,"user");
 
-        if (userEntity == null) {
-            throw new IllegalStateException("Record not found");
-        }
+        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+
         userRepository.delete(userEntity);
     }
 

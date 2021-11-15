@@ -1,6 +1,7 @@
 package com.sayone.obr.ui.controller;
 
 import com.sayone.obr.dto.UserDto;
+import com.sayone.obr.exception.AdminErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.model.request.PublisherDetailsRequestModel;
 import com.sayone.obr.model.response.PublisherRestModel;
@@ -11,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping
 public class PublisherController {
@@ -19,9 +22,11 @@ public class PublisherController {
     UserService userService;
 
     @GetMapping("/publisher/get")
-    public PublisherRestModel getPublisher() {
+    public PublisherRestModel getPublisher() throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
+
+        if (!Objects.equals(user.getRole(), "publisher")) throw new Exception(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
@@ -48,10 +53,13 @@ public class PublisherController {
     }
 
     @PutMapping("/publisher/update")
-    public PublisherRestModel updatePublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) {
+    public PublisherRestModel updatePublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws Exception {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
+
+        if (!Objects.equals(user.getRole(), "publisher")) throw new Exception(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
@@ -65,10 +73,12 @@ public class PublisherController {
     }
 
     @DeleteMapping("/publisher/delete")
-    public void deletePublisher() {
+    public void deletePublisher() throws Exception {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
+
+        if (!Objects.equals(user.getRole(), "publisher")) throw new Exception(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
         userService.deletePublisher(user.getUserId());
     }
