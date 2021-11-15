@@ -10,15 +10,23 @@ public interface DownloadRepository extends JpaRepository<DownloadEntity, Long> 
 
 
     @Query(value = "SELECT dno FROM downloads d where d.uid=?1 and d.bid=?2", nativeQuery = true)
-
-    long getDownloadCheck(String userId, String bookId);
-
-//    "select * from cart c where c.user_id = ?1 and c.cart_status = ?2",
-
-    @Query(value = "select * from downloads d where d.uid = ?1",nativeQuery = true)
-    Optional<DownloadEntity> findByUserId(String userId);
+    long getDownloadCheck(String userId, Long bookId);
 
 
-    @Query(value = "SELECT * FROM downloads d where d.uid=?2 and d.bid=?1", nativeQuery = true)
-    Optional<DownloadEntity> findUploadArea(String bookId, String userId);
+    @Query(value = "select * from downloads d where d.uid = ?1 and d.book_id = ?2",nativeQuery = true)
+    Optional<DownloadEntity> findByUserId(String userId, Long bid);
+
+    @Query(value = "select book_link from book b where b.book_id = ?1",nativeQuery = true)
+    String findBooksLink(Long bookId);
+
+    @Query(value = "select book_name from book b where b.book_id = ?1",nativeQuery = true)
+    String findBookName(Long bookId);
+
+
+//
+//    @Query(value = "SELECT * FROM downloads d where d.uid=?2 and d.bid=?1", nativeQuery = true)
+//    Optional<DownloadEntity> findUploadArea(String bookId, String userId);
+//
+//    @Query(value = "SELECT * FROM downloads d where d.uid=?2 and d.bid=?1", nativeQuery = true)
+//    Optional<DownloadEntity> findByDeleteArea(String bookId, String userId);
 }

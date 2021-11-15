@@ -1,9 +1,6 @@
 package com.sayone.obr.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -16,31 +13,22 @@ public class DownloadEntity implements Serializable {
     @GeneratedValue
     private long Id;
 
-    private String bid;
+
 
     private String uid;
 
     private long dno;
 
-    private String bookLink;
-
-    public String getBookLink() {
-        return bookLink;
+    public long getBookId() {
+        return bookId;
     }
 
-    public void setBookLink(String bookLink) {
-        this.bookLink = bookLink;
+    public void setBookId(long bookId) {
+        this.bookId = bookId;
     }
 
+    private long bookId;
 
-
-    public String getBid() {
-        return bid;
-    }
-
-    public void setBid(String bid) {
-        this.bid = bid;
-    }
 
     public String getUid() {
         return uid;
