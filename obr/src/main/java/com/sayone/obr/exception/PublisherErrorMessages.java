@@ -7,7 +7,7 @@ public enum PublisherErrorMessages {
     NO_RECORD_FOUND("no record found.Please debug."),
     INVALID_ADDRESS("There is no address with this ID"),
     NO_REVIEW_ID_FOUND("There is no Review for this publisher"),
-    NO_PUBLISHER_FOUND("There is no Publisher with this ID"),
+    NO_PUBLISHER_FOUND("Please login as a Publisher"),
     COULD_NOT_UPDATE_RECORD("could not update record.Please debug."),
     COULD_NOT_DELETE_RECORD("could not delete record.Please debug."),
     RECORD_ALREADY_EXISTS("Record already exists"),

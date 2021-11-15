@@ -1,5 +1,7 @@
 package com.sayone.obr.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,16 +26,15 @@ public class BookEntity {
     private long yearOfPublication;
     @Column(nullable = false)
     private String bookDescription;
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
     private UserEntity uid;
 
     public BookEntity() {
-
-        super();
     }
 
-    public BookEntity(long bookId, String bookName, String author, String publisher, String genre, String bookStatus, String bookLink, long yearOfPublication, String bookDescription, UserEntity uid) {
+    public BookEntity(long bookId, String bookName, String author, String publisher, String genre, String bookStatus, String bookLink, long yearOfPublication, String bookDescription) {
         this.bookId= bookId;
         this.bookName = bookName;
         this.author = author;
@@ -43,7 +44,6 @@ public class BookEntity {
         this.bookLink = bookLink;
         this.yearOfPublication = yearOfPublication;
         this.bookDescription = bookDescription;
-        this.uid = uid;
     }
 
     public long getBookId() {
