@@ -4,7 +4,9 @@ package com.sayone.obr.ui.controller;
 import com.sayone.obr.dto.UserDto;
 //import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.DownloadErrors;
 import com.sayone.obr.exception.PublisherErrorMessages;
+import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.service.DownloadService;
 import com.sayone.obr.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -33,20 +35,19 @@ public class DownloadController {
     @Autowired
     UserService userService;
 
-//    @Autowired
-//    BookEntity bookEntity;
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${downloadController.authorizationHeader.description}", paramType = "header")})
+
     @PostMapping("/download/{bid}")
-    public String createDownload(@PathVariable(value = "bid") Long bookId) throws IOException, MessagingException {
+    public String createDownload(@PathVariable(value = "bid") Long bookId) throws MessagingException, IOException {
         UserEntity userEntity = new UserEntity();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
-
-        if (!Objects.equals(user.getRole(), "user")) throw new IOException(PublisherErrorMessages.SWITCH_TO_USER.getPublisherErrorMessages());
-
         BeanUtils.copyProperties(user,userEntity);
+
+        if (!Objects.equals(user.getRole(), "user")) throw new UserServiceException(DownloadErrors.PUBLISHER_CANT_DOWNLOAD.getErrorMessage());
+
         downloadService.downloadBook(user,bookId);
         System.out.println("haI "+user.getFirstName()+user.getLastName());
         return "Thank you" + user.getFirstName()+ user.getLastName()+ " " + "Your book is downloaded successfully";
@@ -54,6 +55,7 @@ public class DownloadController {
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${downloadController.authorizationHeader.description}", paramType = "header")})
+
     @GetMapping("/download/getDno/{bid}")
     public String getDownloadNumber(@PathVariable(value = "bid") Long bookId) {
         UserEntity userEntity = new UserEntity();
