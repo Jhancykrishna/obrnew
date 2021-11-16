@@ -12,8 +12,9 @@ public enum PublisherErrorMessages {
     COULD_NOT_DELETE_RECORD("could not delete record.Please debug."),
     RECORD_ALREADY_EXISTS("Record already exists"),
     REVIEW_ALREADY_GIVEN("User has Already given review for the Publisher"),
-    NO_REVIEW_GIVEN("There are no reviews given by you"),
-    NO_REVIEW_FOUND("There is no review given for the specified product"),
+    CANT_DOWNLOAD_BOOK("Upgrade to Prime User"),
+    SWITCH_TO_USER("Login as a user to Download the Book"),
+    NO_BOOK_FOUND("There is no such Book exist"),
     DELETED_ACCOUNT("Account is deleted");
 
     private String publisherErrorMessages;

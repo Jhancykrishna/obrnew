@@ -5,6 +5,7 @@ import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.entity.DownloadEntity;
 //import com.sayone.obr.entity.PublisherEntity;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.repository.BookRepository;
 import com.sayone.obr.repository.DownloadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ import java.io.File;
 //import java.nio.file.Files;
 //import java.nio.file.Path;
 //import java.util.Objects;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,9 +43,16 @@ public class DownloadService {
 //    @Autowired(required = false)
 //    BookRepository bookRepository;
 
+    @Autowired
+    BookRepository bookRepository;
 
 
-    public void downloadBook(UserDto user, Long bookId) throws MessagingException, UnsupportedEncodingException {
+
+    public void downloadBook(UserDto user, Long bookId) throws MessagingException, IOException {
+
+        BookEntity bookEntity = bookRepository.getById(bookId);
+
+        if (Objects.equals(user.getUserStatus(), "regular") && Objects.equals(bookEntity.getBookStatus(), "prime")) throw new IOException(PublisherErrorMessages.CANT_DOWNLOAD_BOOK.getPublisherErrorMessages());
 
         DownloadEntity downloads = new DownloadEntity();
         DownloadEntity downloadGet = new DownloadEntity();

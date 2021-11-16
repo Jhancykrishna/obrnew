@@ -4,8 +4,11 @@ package com.sayone.obr.ui.controller;
 import com.sayone.obr.dto.UserDto;
 //import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.service.DownloadService;
 import com.sayone.obr.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 //import org.springframework.web.multipart.MultipartFile;
 
 //import java.io.IOException;
@@ -32,17 +36,24 @@ public class DownloadController {
 //    @Autowired
 //    BookEntity bookEntity;
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${downloadController.authorizationHeader.description}", paramType = "header")})
     @PostMapping("/download/{bid}")
-    public String createDownload(@PathVariable(value = "bid") Long bookId) throws MessagingException, UnsupportedEncodingException {
+    public String createDownload(@PathVariable(value = "bid") Long bookId) throws IOException, MessagingException {
         UserEntity userEntity = new UserEntity();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
+
+        if (!Objects.equals(user.getRole(), "user")) throw new IOException(PublisherErrorMessages.SWITCH_TO_USER.getPublisherErrorMessages());
+
         BeanUtils.copyProperties(user,userEntity);
         downloadService.downloadBook(user,bookId);
         System.out.println("haI "+user.getFirstName()+user.getLastName());
         return "Thank you" + user.getFirstName()+ user.getLastName()+ " " + "Your book is downloaded successfully";
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${downloadController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/download/getDno/{bid}")
     public String getDownloadNumber(@PathVariable(value = "bid") Long bookId) {
         UserEntity userEntity = new UserEntity();
