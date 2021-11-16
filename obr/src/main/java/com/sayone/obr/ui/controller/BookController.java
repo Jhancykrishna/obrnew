@@ -3,6 +3,8 @@ import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.service.BookService;
 import com.sayone.obr.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ public class BookController {
      }
 
 //get all books
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+        value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("books")
     public List<BookEntity>getBooks(){
 
@@ -38,12 +42,16 @@ public class BookController {
 
     }
 //get book by id
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+        value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/books/{bId}")
     public Optional<BookEntity> getBook(@PathVariable String bId){
         return bookService.getBook(Long.parseLong(bId));
 
     }
 //post a book
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+        value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @PostMapping("/book")
     public BookEntity addBook(@RequestBody BookEntity books) throws Exception {
 
@@ -53,6 +61,8 @@ public class BookController {
         return bookService.addBook(books,user.getId());
     }
 //update a book
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+        value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @PutMapping("/books")
     public BookEntity updateBook(@RequestBody BookEntity books) throws Exception {
 
@@ -62,6 +72,8 @@ public class BookController {
         return this.bookService.updateBook(books, user.getId());
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping("/books/{bId}")
     public ResponseEntity<HttpStatus>deleteBook(@PathVariable Long bId){
 
@@ -76,6 +88,9 @@ public class BookController {
         }
 
     }
+
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @PostMapping("/book/upload/{bid}")
     public void uploadBook(@RequestParam("file") MultipartFile file,
                            @PathVariable(value = "bid") Long bookId ) throws IOException {
@@ -84,6 +99,8 @@ public class BookController {
         bookService.uploadBook(file,bookId);
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @PostMapping("book/delete/{bid}")
     public void deleteBookUpload(@PathVariable(value = "bid") Long bookId) throws IOException{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

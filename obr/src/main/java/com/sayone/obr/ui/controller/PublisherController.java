@@ -6,6 +6,8 @@ import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.model.request.PublisherDetailsRequestModel;
 import com.sayone.obr.model.response.PublisherRestModel;
 import com.sayone.obr.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,8 @@ public class PublisherController {
     @Autowired
     UserService userService;
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/publisher/get")
     public PublisherRestModel getPublisher() throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -36,7 +40,7 @@ public class PublisherController {
         return returnValue;
     }
 
-    @PostMapping("publisher/signup")
+    @PostMapping("/publisher/signup")
     public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws Exception {
 
         PublisherRestModel returnValue = new PublisherRestModel();
@@ -52,6 +56,8 @@ public class PublisherController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
     @PutMapping("/publisher/update")
     public PublisherRestModel updatePublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws Exception {
 
@@ -72,6 +78,8 @@ public class PublisherController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping("/publisher/delete")
     public void deletePublisher() throws Exception {
 

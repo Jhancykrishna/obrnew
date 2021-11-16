@@ -123,10 +123,12 @@ public class UserServiceImpl implements UserService {
         UserDto returnValue = new UserDto();
         UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
-        if (userEntity == null) throw new IllegalStateException("Record not found");
+        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
         userEntity.setFirstName(userDto.getFirstName());
         userEntity.setLastName(userDto.getLastName());
+        userEntity.setPhoneNumber(userDto.getPhoneNumber());
+        userEntity.setAddress(userDto.getAddress());
 
         UserEntity updatedPublisherDetails = userRepository.save(userEntity);
         BeanUtils.copyProperties(updatedPublisherDetails, returnValue);
