@@ -22,6 +22,9 @@ public interface DownloadRepository extends JpaRepository<DownloadEntity, Long> 
     @Query(value = "select book_name from book b where b.book_id = ?1",nativeQuery = true)
     String findBookName(Long bookId);
 
+    @Query(value = "select book_status from book b where b.book_id = ?1",nativeQuery = true)
+    String findByBookStatus(Long bookId);
+
 
 //
 //    @Query(value = "SELECT * FROM downloads d where d.uid=?2 and d.bid=?1", nativeQuery = true)
