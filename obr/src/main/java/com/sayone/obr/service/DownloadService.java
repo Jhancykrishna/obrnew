@@ -73,9 +73,10 @@ public class DownloadService {
                 long dno = downloadGet.getDno();
                 System.out.println("this is dno " + dno);
                 long newDno = dno + 1L;
-
-                if (newDno > 3) {
-                  //throw new UserServiceException(DownloadErrors.DOWNLOAD_LIMIT.getErrorMessage());
+                
+                
+                  if (newDno > 3) {
+                       
                     String bodyOfExceedMessage = "Hi " + userName + " Sorry You've exceeds your download of this book.." +
                             "If you want to continue your downloads and get more memberships please contact Admin." +
                             "Thank You..";
@@ -86,6 +87,7 @@ public class DownloadService {
                     helper.setSubject("Out of Downloads! " + bookName);
                     helper.setText(bodyOfExceedMessage);
                     javaMailSender.send(message);
+                    throw new UserServiceException(DownloadErrors.DOWNLOAD_LIMIT.getErrorMessage());
 
                 } else {
                     System.out.println("new dno is" + newDno);
