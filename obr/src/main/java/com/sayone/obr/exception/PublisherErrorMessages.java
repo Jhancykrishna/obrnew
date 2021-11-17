@@ -15,7 +15,10 @@ public enum PublisherErrorMessages {
     CANT_DOWNLOAD_BOOK("Upgrade to Prime User"),
     SWITCH_TO_USER("Login as a user to Download the Book"),
     NO_BOOK_FOUND("There is no such Book exist"),
-    DELETED_ACCOUNT("Account is deleted");
+    DELETED_ACCOUNT("Account is deleted"),
+    NOT_YOUR_BOOK("This is not your book, Please enter the correct Book ID or Token value "),
+    BOOK_ALREADY_PRESENT("This Book is already Present"),
+    ONLY_PDF_FILE_ALLOWED("Only PDF File allowed ");
 
     private String publisherErrorMessages;
 
