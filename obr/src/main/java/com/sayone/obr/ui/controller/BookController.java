@@ -1,6 +1,8 @@
 package com.sayone.obr.ui.controller;
 import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.BookEntity;
+import com.sayone.obr.exception.PublisherErrorMessages;
+import com.sayone.obr.repository.BookRepository;
 import com.sayone.obr.service.BookService;
 import com.sayone.obr.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -27,6 +29,9 @@ public class BookController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    BookRepository bookRepository;
+
     @GetMapping("/home")
     public String home(){
          return "welcome to book page";
@@ -41,6 +46,10 @@ public class BookController {
         return bookService.getBooks();
 
     }
+
+
+
+
 //get book by id
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
         value = "${bookController.authorizationHeader.description}", paramType = "header")})
@@ -49,6 +58,10 @@ public class BookController {
         return bookService.getBook(Long.parseLong(bId));
 
     }
+
+
+
+
 //post a book
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
         value = "${bookController.authorizationHeader.description}", paramType = "header")})
@@ -60,17 +73,26 @@ public class BookController {
 
         return bookService.addBook(books,user.getId());
     }
+
+
+
+
 //update a book
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
         value = "${bookController.authorizationHeader.description}", paramType = "header")})
-    @PutMapping("/books")
-    public BookEntity updateBook(@RequestBody BookEntity books) throws Exception {
+    @PutMapping("/book/{bId}")
+    public BookEntity updateBook(@RequestBody BookEntity books,@PathVariable Long bId) throws Exception {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
-        return this.bookService.updateBook(books, user.getId());
+        return this.bookService.updateBook(books,bId, user.getId());
     }
+
+
+
+
+
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${bookController.authorizationHeader.description}", paramType = "header")})
@@ -96,7 +118,9 @@ public class BookController {
                            @PathVariable(value = "bid") Long bookId ) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
-        bookService.uploadBook(file,bookId);
+        if(!file.getContentType().equals("application/pdf")){ throw new IOException(PublisherErrorMessages.ONLY_PDF_FILE_ALLOWED.getPublisherErrorMessages());}
+            bookService.uploadBook(file, bookId, user.getId());
+
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
