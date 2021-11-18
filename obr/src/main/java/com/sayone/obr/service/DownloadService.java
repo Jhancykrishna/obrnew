@@ -64,6 +64,9 @@ public class DownloadService {
         System.out.println("this is book link "+bookLink);
         String userName = user.getFirstName()+ user.getLastName();
         System.out.println("user name is "+ userName);
+        
+        
+          if(optionalDownload.isEmpty())throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
 
 
             if (optionalDownload.isPresent()) {
