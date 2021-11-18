@@ -47,12 +47,15 @@ public class DownloadService {
 
         BookEntity bookEntity = bookRepository.getById(bookId);
 
+
      if (Objects.equals(user.getUserStatus(), "regular") && Objects.equals(bookEntity.getBookStatus(), "prime"))
          throw new UserServiceException(DownloadErrors.GET_PRIME_ACCOUNT.getErrorMessage());
 
         DownloadEntity downloads = new DownloadEntity();
         DownloadEntity downloadGet = new DownloadEntity();
         Optional<DownloadEntity> optionalDownload = downloadRepository.findByUserId(user.getUserId(), bookId);
+
+        if(optionalDownload.isEmpty())throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
 
         String fromAddress = "springobrtest@gmail.com";
         String senderName = "OBR";
@@ -64,9 +67,6 @@ public class DownloadService {
         System.out.println("this is book link "+bookLink);
         String userName = user.getFirstName()+ user.getLastName();
         System.out.println("user name is "+ userName);
-        
-        
-          if(optionalDownload.isEmpty())throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
 
 
             if (optionalDownload.isPresent()) {
@@ -80,9 +80,9 @@ public class DownloadService {
                 
                   if (newDno > 3) {
                        
-                    String bodyOfExceedMessage = "Hi " + userName + " Sorry You've exceeds your download of this book.." +
-                            "If you want to continue your downloads and get more memberships please contact Admin." +
-                            "Thank You..";
+                    String bodyOfExceedMessage = "Hi " + userName + " Sorry You've exceeded your download of this book.." +
+                            " If you want to continue your downloads and get more memberships please contact Admin. " +
+                            " Thank You..";
                     MimeMessage message = javaMailSender.createMimeMessage();
                     MimeMessageHelper helper = new MimeMessageHelper(message, true);
                     helper.setFrom(fromAddress, senderName);
@@ -114,7 +114,7 @@ public class DownloadService {
                     MimeMessageHelper helper = new MimeMessageHelper(message, true);
                     helper.setFrom(fromAddress, senderName);
                     helper.setTo(toAddress);
-                    helper.setSubject("Here's your " + bookName + "!");
+                    helper.setSubject("Your " + bookName + " is here!");
                     helper.setText(body2);
                     FileSystemResource file = new FileSystemResource(new File(bookLink));
                     helper.addAttachment(bookName + ".pdf", file);
@@ -142,10 +142,13 @@ public class DownloadService {
 //            System.out.println("getting book name to sent mail");
 
                 //Long dnoRemain = - 10L - downloadGet.getDno() ;
-                String body1 = "Hi " + userName + " Welcome to OBR. A Reader lives a thousand lives before he dies....." +
-                        " Thank you for your purchase for " + bookName + "from OBR.. Continue purchasing and explore your knowledge through reading." +
-                        " You can Only download this book for 3 times." +
-                        " Enjoy your reading with OBR.." +
+                String body1 = "Hi " + userName + " Welcome to OBR. " +
+                        " Our Online Book Reader is a new platform where you can explore new face of reading of your favourites book. " +
+                        " You can read and download all types of books from our store. " +
+                        " A Reader lives a thousand lives before he dies....." +
+                        " Thank you for your purchase for " + bookName + " from our OBR.. Continue purchasing and explore your knowledge through reading." +
+                        " You can Only download this book for 3 times. " +
+                        " Enjoy your reading with OBR.. " +
                         " Once again Thank You " + userName;
                 MimeMessage message = javaMailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(message, true);
