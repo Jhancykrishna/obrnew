@@ -4,7 +4,7 @@ public class AdminDetailsRequestModel {
 
     private String email;
     private String password;
-    private String role;
+    private String role = "admin";
     private String userStatus = "prime";
 
     public String getUserStatus() {

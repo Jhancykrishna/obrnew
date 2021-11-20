@@ -2,6 +2,7 @@ package com.sayone.obr.ui.controller;
 import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.exception.PublisherErrorMessages;
+import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.repository.BookRepository;
 import com.sayone.obr.service.BookService;
 import com.sayone.obr.service.UserService;
@@ -115,10 +116,10 @@ public class BookController {
             value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @PostMapping("/book/upload/{bid}")
     public void uploadBook(@RequestParam("file") MultipartFile file,
-                           @PathVariable(value = "bid") Long bookId ) throws IOException {
+                           @PathVariable(value = "bid") Long bookId ) throws UserServiceException, IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
-        if(!file.getContentType().equals("application/pdf")){ throw new IOException(PublisherErrorMessages.ONLY_PDF_FILE_ALLOWED.getPublisherErrorMessages());}
+        if(!file.getContentType().equals("application/pdf")){ throw new UserServiceException(PublisherErrorMessages.ONLY_PDF_FILE_ALLOWED.getPublisherErrorMessages());}
             bookService.uploadBook(file, bookId, user.getId());
 
     }
@@ -126,7 +127,7 @@ public class BookController {
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${bookController.authorizationHeader.description}", paramType = "header")})
     @PostMapping("book/delete/{bid}")
-    public void deleteBookUpload(@PathVariable(value = "bid") Long bookId) throws IOException{
+    public void deleteBookUpload(@PathVariable(value = "bid") Long bookId) throws UserServiceException, IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
         bookService.deleteBookUpload(bookId, user.getId());
