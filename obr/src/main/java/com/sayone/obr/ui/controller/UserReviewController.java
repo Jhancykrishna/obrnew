@@ -48,7 +48,7 @@ public class UserReviewController {
         return reviewResponseModel;
 
     }
-
+    
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${userReviewController.authorizationHeader.description}", paramType = "header")})
@@ -59,6 +59,19 @@ public class UserReviewController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
         List<ReviewResponseModel> reviewResponseModels = userReviewService.findReviewsByUser(user.getId());
+        return reviewResponseModels;
+
+    }
+    
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${userReviewController.authorizationHeader.description}", paramType = "header")})
+
+    @GetMapping("get/list/{bid}")
+    public List<ReviewResponseModel> getAllReviewByBookId(@PathVariable("bid") Long bookId) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+        List<ReviewResponseModel> reviewResponseModels = userReviewService.findAllReviewsOfBook(bookId);
         return reviewResponseModels;
 
     }
