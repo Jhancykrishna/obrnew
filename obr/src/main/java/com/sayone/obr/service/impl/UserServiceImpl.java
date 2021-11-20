@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -126,10 +127,13 @@ public class UserServiceImpl implements UserService {
 
         if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
+        if (Objects.equals(userDto.getFirstName(), "")) throw new UserServiceException(PublisherErrorMessages.MISSING_FIRST_NAME.getPublisherErrorMessages());
         userEntity.setFirstName(userDto.getFirstName());
+        if (Objects.equals(userDto.getLastName(), "")) throw new UserServiceException(PublisherErrorMessages.MISSING_LAST_NAME.getPublisherErrorMessages());
         userEntity.setLastName(userDto.getLastName());
         userEntity.setPhoneNumber(userDto.getPhoneNumber());
         userEntity.setAddress(userDto.getAddress());
+        userEntity.setUserStatus(userDto.getUserStatus());
 
         UserEntity updatedPublisherDetails = userRepository.save(userEntity);
         BeanUtils.copyProperties(updatedPublisherDetails, returnValue);
@@ -138,13 +142,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deletePublisher(String userId) {
+    public String deletePublisher(String userId) throws UserServiceException {
         UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
         if (userEntity == null) {
-            throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+            throw new UserServiceException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
         }
         userRepository.delete(userEntity);
+
+        return PublisherErrorMessages.DELETED_ACCOUNT.getPublisherErrorMessages();
     }
 
     @Override
@@ -172,13 +178,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String userId) {
+    public String deleteUser(String userId) {
 
         UserEntity userEntity = userRepository.findByPublisherId(userId,"user");
 
-        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        if (userEntity == null) throw new UserServiceException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
 
         userRepository.delete(userEntity);
+
+        return PublisherErrorMessages.DELETED_ACCOUNT.getPublisherErrorMessages();
     }
 
     @Override

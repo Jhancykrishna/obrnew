@@ -33,4 +33,7 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
   @Query(value = "SELECT * FROM book b where b.book_name=?1 and b.publisher_id=?2", nativeQuery = true)
   Optional<BookEntity> searchBooks(String bookName, Long id);
+
+  @Query(value = "SELECT * FROM book b where b.book_id=?1", nativeQuery = true)
+  BookEntity getBookId(Long bookId);
 }

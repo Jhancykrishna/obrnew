@@ -2,7 +2,9 @@ package com.sayone.obr.service.impl;
 
 import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.AdminErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
+import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.repository.BookRepository;
 import com.sayone.obr.repository.UserRepository;
 import com.sayone.obr.service.BookService;
@@ -48,11 +50,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookEntity addBook(BookEntity books, Long id) throws Exception {
+    public BookEntity addBook(BookEntity books, Long id) throws UserServiceException {
         UserEntity userEntity = userRepository.findAllById(id);
-        if (userEntity == null || !Objects.equals(userEntity.getRole(), "publisher")) throw new Exception(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+        if (userEntity == null || !Objects.equals(userEntity.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
         Optional<BookEntity>bookEntity=bookRepository.searchBooks(books.getBookName(),id);
-        if(!bookEntity.isEmpty()) {throw new Exception(PublisherErrorMessages.BOOK_ALREADY_PRESENT.getPublisherErrorMessages());}
+        if(!bookEntity.isEmpty()) {throw new UserServiceException(PublisherErrorMessages.BOOK_ALREADY_PRESENT.getPublisherErrorMessages());}
 
 
         books.setUid(userRepository.getById(id));
@@ -62,10 +64,10 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public void deleteBook(Long bId, Long id) throws Exception {
+    public void deleteBook(Long bId, Long id) throws UserServiceException {
         BookEntity bookEntity = bookRepository.findAllByIds(bId, id);
 
-        if (bookEntity == null) throw new Exception(PublisherErrorMessages.COULD_NOT_DELETE_RECORD.getPublisherErrorMessages());
+        if (bookEntity == null) throw new UserServiceException(PublisherErrorMessages.COULD_NOT_DELETE_RECORD.getPublisherErrorMessages());
 
         BookEntity entity = bookRepository.getById(bId);
         bookRepository.delete(entity);
@@ -74,11 +76,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookEntity updateBook(BookEntity books,Long bId, Long id) throws Exception {
+    public BookEntity updateBook(BookEntity books,Long bId, Long id) throws UserServiceException {
 
         BookEntity bookEntity = bookRepository.findAllByIds(bId, id);
 
-        if (bookEntity == null) throw new Exception(PublisherErrorMessages.COULD_NOT_UPDATE_RECORD.getPublisherErrorMessages());
+        if (bookEntity == null) throw new UserServiceException(PublisherErrorMessages.COULD_NOT_UPDATE_RECORD.getPublisherErrorMessages());
         bookEntity.setBookName(books.getBookName());
         bookEntity.setAuthor(books.getAuthor());
         bookEntity.setBookStatus(books.getBookStatus());
@@ -90,16 +92,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void uploadBook(MultipartFile file, Long bookId, Long id) throws IOException {
+    public void uploadBook(MultipartFile file, Long bookId, Long id) throws UserServiceException, IOException {
         Optional<BookEntity> optionalUpload = bookRepository.findUploadArea(bookId,id);
-        if(!optionalUpload.isPresent()) {throw new IOException(PublisherErrorMessages.NOT_YOUR_BOOK.getPublisherErrorMessages());}
+        if(!optionalUpload.isPresent()) {throw new UserServiceException(PublisherErrorMessages.NOT_YOUR_BOOK.getPublisherErrorMessages());}
         BookEntity findUpload = optionalUpload.get();
 
         if (optionalUpload.isEmpty()) {
             throw new IllegalStateException("No book found to upload..");
         }
         else {
-            String path = "/home/meenakshi/obrnew/obr/BookUpload/" + bookId + ".pdf";
+            String path = "/mnt/3160CFF84E83C8AD/SayOne/IDEs/Linux/Java Projects/obr2/obrnew/obr/BookUpload/" + bookId + ".pdf";
             file.transferTo(new File(path));
             findUpload.setBookLink(path);
             System.out.println("Book PDF Uploaded Successfully.....");
@@ -110,11 +112,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBookUpload(Long bookId, Long id) throws IOException {
+    public void deleteBookUpload(Long bookId, Long id) throws UserServiceException, IOException {
 
         BookEntity bookEntity = bookRepository.findAllByIds(bookId, id);
 
-        if (bookEntity == null) throw new IOException(PublisherErrorMessages.COULD_NOT_DELETE_RECORD.getPublisherErrorMessages());
+        if (bookEntity == null) throw new UserServiceException(PublisherErrorMessages.COULD_NOT_DELETE_RECORD.getPublisherErrorMessages());
 
         Optional<BookEntity> optionalDelete = bookRepository.findByDeleteArea(bookId);
         BookEntity findDelete = optionalDelete.get();
@@ -122,7 +124,7 @@ public class BookServiceImpl implements BookService {
         if (Objects.equals(pathCheck, "") || Objects.equals(pathCheck, "deleted..")) {
             System.out.println("No files to delete");
         } else {
-            Path path = Path.of ("//home/meenakshi/obrnew/obr/BookUpload/" + bookId + ".pdf");
+            Path path = Path.of ("/mnt/3160CFF84E83C8AD/SayOne/IDEs/Linux/Java Projects/obr2/obrnew/obr/BookUpload/" + bookId + ".pdf");
             Files.delete((Path) path);
             findDelete.setBookLink("deleted..");
             System.out.println("Book PDF deleted successfully");
@@ -131,13 +133,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deletePostedBookByAdmin(Long bId) throws Exception {
+    public String deletePostedBookByAdmin(Long bId) throws UserServiceException {
 
         BookEntity bookEntity = bookRepository.findAllByBookId(bId);
 
-        if (bookEntity == null) throw new Exception(PublisherErrorMessages.COULD_NOT_DELETE_RECORD.getPublisherErrorMessages());
+        if (bookEntity == null) throw new UserServiceException(PublisherErrorMessages.COULD_NOT_DELETE_RECORD.getPublisherErrorMessages());
 
         BookEntity entity = bookRepository.getById(bId);
         bookRepository.delete(entity);
+
+        return AdminErrorMessages.DELETED_BOOK.getAdminErrorMessages();
     }
 }
