@@ -164,10 +164,12 @@ public class UserReviewServiceImpl implements UserReviewService {
 //        return userEntity.get();
 //    }
 
-    @Override
+   @Override
     public void deleteReview(Long bookId, Long Id) {
         getBookById(bookId);
-        userReviewRepository.deleteReview(bookId, Id);
+        Integer status = userReviewRepository.deleteReview(bookId, Id);
+        if (status == 0)
+            throw new UserServiceException(ErrorMessages.NO_REVIEW_FOUND.getErrorMessage());
 
 
     }
