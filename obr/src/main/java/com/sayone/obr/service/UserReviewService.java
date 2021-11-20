@@ -16,6 +16,8 @@ public interface UserReviewService {
     ReviewResponseModel getReviewsByBookId(Long bookId,Long Id);
 
     List<ReviewResponseModel> findReviewsByUser(Long Id);
+    
+    List<ReviewResponseModel> findAllReviewsOfBook(Long bookId);
 
     ReviewResponseModel updateReview(ReviewRequestModel reviewRequestModel, Long Id);
 
