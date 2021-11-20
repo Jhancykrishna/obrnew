@@ -15,7 +15,7 @@ public interface UserReviewRepository extends JpaRepository<UserReviewEntity,Lon
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM reviews r WHERE r.book_id = ?1 and r.user_id = ?2", nativeQuery = true)
-    void deleteReview(Long bookId, Long Id);
+    Integer deleteReview(Long bookId, Long Id);
 
 
     @Query(value = "select * from reviews r where r.user_id = ?1", nativeQuery = true)
@@ -30,4 +30,7 @@ public interface UserReviewRepository extends JpaRepository<UserReviewEntity,Lon
 
     @Query(value = "select * from reviews r where r.book_id = ?1", nativeQuery = true)
     Optional<UserReviewEntity> getBookId(Long bookId);
+    
+    @Query(value = "select * from reviews r where r.book_id = ?1", nativeQuery = true)
+    List<UserReviewEntity> findAllReviewsOfBook(Long bookId);
 }
