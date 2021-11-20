@@ -104,6 +104,23 @@ public class UserReviewServiceImpl implements UserReviewService {
         }
         return reviewResponseModels;
     }
+    
+     @Override
+    public List<ReviewResponseModel> findAllReviewsOfBook(Long bookId) {
+        List<UserReviewEntity> reviewEntityList = userReviewRepository.findAllReviewsOfBook(bookId);
+        if (reviewEntityList.isEmpty())
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        List<ReviewResponseModel> reviewResponseModels = new ArrayList<>();
+        for (UserReviewEntity userReviewEntity : reviewEntityList) {
+            ReviewResponseModel reviewResponseModel = new ReviewResponseModel();
+            BeanUtils.copyProperties(userReviewEntity, reviewResponseModel);
+            reviewResponseModel.setBookName(userReviewEntity.getBookEntity().getBookName());
+            reviewResponseModel.setUserName(userReviewEntity.getUserEntity().getFirstName());
+            reviewResponseModels.add(reviewResponseModel);
+        }
+        return reviewResponseModels;
+    }
 
 
 
@@ -154,15 +171,7 @@ public class UserReviewServiceImpl implements UserReviewService {
         return userEntity.get();
     }
 
-//
-//    @Override
-//    public UserEntity getUserByUserId(String userId) {
-//        Optional< UserEntity> userEntity = userRepository.findByUserId(userId);
-////        if (bookEntity.isEmpty()) {
-//////            throw new RequestException(ErrorMessages.NO_PRODUCT_FOUND.getErrorMessages());
-//////        }
-//        return userEntity.get();
-//    }
+
 
    @Override
     public void deleteReview(Long bookId, Long Id) {
