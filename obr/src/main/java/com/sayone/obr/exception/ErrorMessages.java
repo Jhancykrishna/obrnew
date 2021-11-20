@@ -3,7 +3,9 @@ package com.sayone.obr.exception;
 public enum ErrorMessages {
     MISSING_REQUIRED_FIELD("Missing Required field. Please check documentation for required fields"),
     INTERNAL_SERVER_ERROR("internal error.Please debug"),
-    NO_RECORD_FOUND("no record found.Please debug"),
+    NO_RECORD_FOUND("no record found."),
+    NO_USER_FOUND("no user found."),
+    NO_REVIEW_FOUND("no review found."),
     AUTHENTICATION_FAILED("Authentication Failed"),
     RECORD_ALREADY_EXISTS("Record already exists"),
     COULD_NOT_UPDATE_RECORD("Could not update record"),
