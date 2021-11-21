@@ -8,12 +8,9 @@ import com.sayone.obr.exception.DownloadErrors;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.model.request.AdminDetailsRequestModel;
-import com.sayone.obr.model.request.PublisherDetailsRequestModel;
 import com.sayone.obr.model.response.AdminRestModel;
 import com.sayone.obr.model.response.PublisherRestModel;
-import com.sayone.obr.model.response.UserRestModel;
 import com.sayone.obr.repository.BookRepository;
-import com.sayone.obr.repository.DownloadRepository;
 import com.sayone.obr.service.BookService;
 import com.sayone.obr.service.DownloadService;
 import com.sayone.obr.service.UserService;
@@ -27,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -49,7 +46,7 @@ public class AdminController {
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/admin/get-publishers")
-    public PublisherRestModel getAllPublishers() throws UserServiceException {
+    public List<UserEntity> getAllPublishers() throws UserServiceException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
@@ -57,28 +54,26 @@ public class AdminController {
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
-        UserDto userDto = userService.getAllPublishersByRole();
-        BeanUtils.copyProperties(userDto, returnValue);
+//        UserDto userDto = userService.getAllPublishersByRole();
+//        BeanUtils.copyProperties(userDto, returnValue);
 
-        return returnValue;
+        return userService.getAllPublishersByRole();
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/admin/get-users")
-    public UserRestModel getAllUsers() throws UserServiceException {
+    public List<UserEntity> getAllUsers() throws UserServiceException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
         if (!Objects.equals(user.getRole(), "admin")) throw new UserServiceException(AdminErrorMessages.NOT_AN_ADMIN.getAdminErrorMessages());
 
-        UserRestModel returnValue = new UserRestModel();
+//        UserRestModel returnValue = new UserRestModel();
 
-        UserDto userDto = userService.getAllUsersByRole();
-        BeanUtils.copyProperties(userDto, returnValue);
-
-        return returnValue;
+        return userService.getAllUsersByRole();
     }
+
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("admin/download/book/{bid}")
@@ -135,27 +130,27 @@ public class AdminController {
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping("/admin/del/publisher/{id}")
-    public String deletePublisher(@PathVariable String id) throws UserServiceException {
+    public String deletePublisher(@PathVariable Long id) throws UserServiceException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
         if (!Objects.equals(user.getRole(), "admin")) throw new UserServiceException(AdminErrorMessages.NOT_AN_ADMIN.getAdminErrorMessages());
 
-        return userService.deletePublisher(id);
+        return userService.deletePublisherByAdmin(id);
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping("/admin/del/user/{id}")
-    public String deleteUser(@PathVariable String id) throws UserServiceException {
+    public String deleteUser(@PathVariable Long id) throws UserServiceException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
         if (!Objects.equals(user.getRole(), "admin")) throw new UserServiceException(AdminErrorMessages.NOT_AN_ADMIN.getAdminErrorMessages());
 
-        return userService.deleteUser(id);
+        return userService.deleteUserByAdmin(id);
     }
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",

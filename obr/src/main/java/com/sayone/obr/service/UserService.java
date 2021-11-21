@@ -1,7 +1,10 @@
 package com.sayone.obr.service;
 
 import com.sayone.obr.dto.UserDto;
+import com.sayone.obr.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
@@ -23,11 +26,13 @@ public interface UserService extends UserDetailsService {
 
     UserDto updatePublisher(String userId, UserDto userDto);
 
-    String deletePublisher(String userId);
+    String deletePublisher(String id);
 
-    UserDto getAllPublishersByRole();
+    List<UserEntity> getAllPublishersByRole();
 
-    UserDto getAllUsersByRole();
+    List<UserEntity> getAllUsersByRole();
 
-    String deleteUser(String userId);
+    String deleteUserByAdmin(Long id);
+
+    String deletePublisherByAdmin(Long id);
 }
