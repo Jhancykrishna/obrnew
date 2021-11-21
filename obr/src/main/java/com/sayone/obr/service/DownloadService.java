@@ -55,7 +55,7 @@ public class DownloadService {
         DownloadEntity downloadGet = new DownloadEntity();
         Optional<DownloadEntity> optionalDownload = downloadRepository.findByUserId(user.getUserId(), bookId);
 
-        if(optionalDownload.isEmpty())throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
+        //if(optionalDownload.isEmpty())throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
 
         String fromAddress = "springobrtest@gmail.com";
         String senderName = "OBR";
