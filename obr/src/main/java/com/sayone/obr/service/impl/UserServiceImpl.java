@@ -2,6 +2,7 @@ package com.sayone.obr.service.impl;
 
 import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.AdminErrorMessages;
 import com.sayone.obr.exception.ErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -131,9 +133,6 @@ public class UserServiceImpl implements UserService {
         userEntity.setFirstName(userDto.getFirstName());
         if (Objects.equals(userDto.getLastName(), "")) throw new UserServiceException(PublisherErrorMessages.MISSING_LAST_NAME.getPublisherErrorMessages());
         userEntity.setLastName(userDto.getLastName());
-        userEntity.setPhoneNumber(userDto.getPhoneNumber());
-        userEntity.setAddress(userDto.getAddress());
-        userEntity.setUserStatus(userDto.getUserStatus());
 
         UserEntity updatedPublisherDetails = userRepository.save(userEntity);
         BeanUtils.copyProperties(updatedPublisherDetails, returnValue);
@@ -154,33 +153,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getAllPublishersByRole() {
+    public List<UserEntity> getAllPublishersByRole() {
 
-        UserEntity userEntity = userRepository.findAllByRole("publisher");
-        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        List<UserEntity> userEntity = userRepository.findAllByRole("publisher");
+        if (userEntity.isEmpty()) throw new UserServiceException(AdminErrorMessages.NO_PUBLISHERS_EXIST.getAdminErrorMessages());
 
-        UserDto returnValue = new UserDto();
-        BeanUtils.copyProperties(userEntity, returnValue);
+//        UserDto returnValue = new UserDto();
+//        BeanUtils.copyProperties(userEntity, returnValue);
 
-        return returnValue;
+        return userEntity;
     }
 
     @Override
-    public UserDto getAllUsersByRole() {
+    public List<UserEntity> getAllUsersByRole() {
 
-        UserEntity userEntity = userRepository.findAllByRole("user");
-        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        List<UserEntity> userEntity = userRepository.findAllByRole("user");
+        if (userEntity == null) throw new IllegalStateException(AdminErrorMessages.NO_USERS_EXIST.getAdminErrorMessages());
 
-        UserDto returnValue = new UserDto();
-        BeanUtils.copyProperties(userEntity, returnValue);
+//        UserRestModel returnValue = new UserDto();
+//        BeanUtils.copyProperties(userRestModels, returnValue);
 
-        return returnValue;
+        return userEntity;
     }
 
     @Override
-    public String deleteUser(String userId) {
+    public String deletePublisherByAdmin(Long id) throws UserServiceException {
+        UserEntity userEntity = userRepository.findById(id,"publisher");
 
-        UserEntity userEntity = userRepository.findByPublisherId(userId,"user");
+        if (userEntity == null) {
+            throw new UserServiceException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        }
+        userRepository.delete(userEntity);
+
+        return PublisherErrorMessages.DELETED_ACCOUNT.getPublisherErrorMessages();
+    }
+
+    @Override
+    public String deleteUserByAdmin(Long id) {
+
+        UserEntity userEntity = userRepository.findById(id,"user");
 
         if (userEntity == null) throw new UserServiceException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
 

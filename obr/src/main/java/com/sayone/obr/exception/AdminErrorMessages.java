@@ -16,6 +16,8 @@ public enum AdminErrorMessages {
     DELETED_BOOK("Book is deleted"),
     NO_BOOK_FOUND("No book is available right now..."),
     NOT_AN_ADMIN("You are not an Admin!!! Please login as an Admin"),
+    NO_USERS_EXIST("No Users Exist!!!"),
+    NO_PUBLISHERS_EXIST("No Publishers Exist!!!"),
     INVALID_LOGIN("Email or Password you entered is Wrong! Please check again.");
 
     private String adminErrorMessages;
