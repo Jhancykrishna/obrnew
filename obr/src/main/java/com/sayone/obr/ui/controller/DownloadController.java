@@ -47,6 +47,9 @@ public class DownloadController {
         BeanUtils.copyProperties(user,userEntity);
 
         if (!Objects.equals(user.getRole(), "user")) throw new UserServiceException(DownloadErrors.PUBLISHER_CANT_DOWNLOAD.getErrorMessage());
+        
+        if (bookEntity == null) throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
+
 
         downloadService.downloadBook(user,bookId);
         System.out.println("haI "+user.getFirstName()+user.getLastName());
