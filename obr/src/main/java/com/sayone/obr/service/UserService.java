@@ -35,4 +35,8 @@ public interface UserService extends UserDetailsService {
     String deleteUserByAdmin(Long id);
 
     String deletePublisherByAdmin(Long id);
+
+ List<UserEntity> getAll(int page, int limit);
+
+ String viewProfile(Long id);
 }

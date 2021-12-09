@@ -3,9 +3,11 @@ package com.sayone.obr.repository;
 import com.sayone.obr.entity.DownloadEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface DownloadRepository extends JpaRepository<DownloadEntity, Long> {
 
 

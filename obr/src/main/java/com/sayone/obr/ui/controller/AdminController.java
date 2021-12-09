@@ -76,7 +76,22 @@ public class AdminController {
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
-    @GetMapping("admin/download/book/{bid}")
+    @GetMapping("/admin/get-all")
+    public List<UserEntity> getAll(@RequestParam(value = "page", defaultValue = "1") int page,
+                                        @RequestParam(value = "limit", defaultValue = "1") int limit) throws UserServiceException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        if (!Objects.equals(user.getRole(), "admin")) throw new UserServiceException(AdminErrorMessages.NOT_AN_ADMIN.getAdminErrorMessages());
+
+//        UserRestModel returnValue = new UserRestModel();
+
+        return userService.getAll(page, limit);
+    }
+
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${adminController.authorizationHeader.description}", paramType = "header")})
+    @PostMapping("admin/download/book/{bid}")
     public String downloadBook(@PathVariable(value = "bid") Long bookId) throws MessagingException, IOException, UserServiceException {
         UserEntity userEntity = new UserEntity();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

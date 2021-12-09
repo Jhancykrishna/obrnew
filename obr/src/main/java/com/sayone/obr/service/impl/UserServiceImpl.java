@@ -6,11 +6,15 @@ import com.sayone.obr.exception.AdminErrorMessages;
 import com.sayone.obr.exception.ErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
+import com.sayone.obr.repository.UserPaginationRepository;
 import com.sayone.obr.repository.UserRepository;
 import com.sayone.obr.service.UserService;
 import com.sayone.obr.shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserPaginationRepository userPaginationRepository;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -185,6 +192,55 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(userEntity);
 
         return PublisherErrorMessages.DELETED_ACCOUNT.getPublisherErrorMessages();
+    }
+
+    @Override
+    public List<UserEntity> getAll(int page, int limit) {
+
+        List<UserEntity> returnValue = new ArrayList<>();
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<UserEntity> usersPage = userPaginationRepository.findAll(pageableRequest);
+        List<UserEntity> users = usersPage.getContent();
+
+        for(UserEntity userEntity: users) {
+            UserEntity user = new UserEntity();
+            user.setFirstName(userEntity.getFirstName());
+            user.setLastName(userEntity.getLastName());
+            user.setEmail(userEntity.getEmail());
+            user.setAddress(userEntity.getAddress());
+            user.setUserStatus(userEntity.getUserStatus());
+            user.setRole(userEntity.getRole());
+
+            BeanUtils.copyProperties(userEntity,user);
+            returnValue.add(user);
+
+        }
+        return returnValue;
+    }
+
+    @Override
+    public String viewProfile(Long id) {
+
+        List<Object[]> objs = userRepository.findAllBooks(id);
+
+        Object[] obj = objs.get(0);
+
+        String userFirstName = String.valueOf(obj[0]);
+        String userEmail = String.valueOf(obj[1]);
+        String userPhoneNumber = String.valueOf(obj[2]);
+        String userAddress = String.valueOf(obj[3]);
+        String bookName = String.valueOf(obj[4]);
+        String authorName = String.valueOf(obj[5]);
+        String yearOfPublication = String.valueOf(obj[6]);
+
+        return  "userFirstName=" + userFirstName + '\n' +
+                " userEmail=" + userEmail + '\n' +
+                " userPhoneNumber=" + userPhoneNumber + '\n' +
+                " userAddress=" + userAddress + '\n' +
+                " bookName=" + bookName + '\n' +
+                " authorName=" + authorName + '\n' +
+                " yearOfPublication=" + yearOfPublication +'\n';
     }
 
     @Override
