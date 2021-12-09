@@ -1,7 +1,6 @@
 package com.sayone.obr.ui.controller;
 
 import com.sayone.obr.dto.UserDto;
-import com.sayone.obr.exception.AdminErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.model.request.PublisherDetailsRequestModel;
@@ -40,6 +39,30 @@ public class PublisherController {
 
         return returnValue;
     }
+
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
+    @GetMapping("/publisher/viewprofile")
+    public String viewProfile() throws UserServiceException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        if (!Objects.equals(user.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+
+        return userService.viewProfile(user.getId());
+    }
+
+//    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+//            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
+//    @GetMapping("/publisher/books")
+//    public List<BookRestModel> getbooks() throws UserServiceException {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        UserDto user = userService.getUser(auth.getName());
+//
+//        if (!Objects.equals(user.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+//
+//        return userMapper.getbooks(user.getId());
+//    }
 
     @PostMapping("/publisher/signup")
     public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws UserServiceException {
