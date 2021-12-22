@@ -1,7 +1,6 @@
 package com.sayone.obr.service;
 
 import com.sayone.obr.model.request.UserDetailsRequestModel;
-import org.apache.catalina.User;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
