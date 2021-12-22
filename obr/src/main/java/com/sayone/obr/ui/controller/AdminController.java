@@ -13,6 +13,7 @@ import com.sayone.obr.model.response.PublisherRestModel;
 import com.sayone.obr.repository.BookRepository;
 import com.sayone.obr.service.BookService;
 import com.sayone.obr.service.DownloadService;
+import com.sayone.obr.service.EmailService;
 import com.sayone.obr.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -42,6 +43,9 @@ public class AdminController {
 
     @Autowired
     BookRepository bookRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
@@ -78,7 +82,7 @@ public class AdminController {
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/admin/get-all")
     public List<UserEntity> getAll(@RequestParam(value = "page", defaultValue = "1") int page,
-                                        @RequestParam(value = "limit", defaultValue = "1") int limit) throws UserServiceException {
+                                   @RequestParam(value = "limit", defaultValue = "1") int limit) throws UserServiceException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
@@ -89,10 +93,30 @@ public class AdminController {
         return userService.getAll(page, limit);
     }
 
+//    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+//            value = "${adminController.authorizationHeader.description}", paramType = "header")})
+//    @PostMapping("admin/download/book/{bid}")
+//    public String downloadBook(@PathVariable(value = "bid") Long bookId) throws MessagingException, IOException, UserServiceException {
+//        UserEntity userEntity = new UserEntity();
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        UserDto user = userService.getUser(auth.getName());
+//        BeanUtils.copyProperties(user,userEntity);
+//
+//        if (!Objects.equals(user.getRole(), "admin")) throw new UserServiceException(DownloadErrors.PUBLISHER_CANT_DOWNLOAD.getErrorMessage());
+//
+//        BookEntity bookEntity = bookRepository.getBookId(bookId);
+//
+//        if (bookEntity == null) throw new UserServiceException(AdminErrorMessages.NO_BOOK_FOUND.getAdminErrorMessages());
+//
+//        downloadService.downloadBook(user,bookId);
+//        System.out.println("hai "+user.getFirstName()+ " " + user.getLastName());
+//        return "Thank you " + user.getFirstName() + user.getLastName() + " " + " Your book is downloaded successfully ";
+//    }
+
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${adminController.authorizationHeader.description}", paramType = "header")})
     @PostMapping("admin/download/book/{bid}")
-    public String downloadBook(@PathVariable(value = "bid") Long bookId) throws MessagingException, IOException, UserServiceException {
+    public String downloadBookByAdmin(@PathVariable(value = "bid") Long bookId) throws MessagingException, IOException, UserServiceException {
         UserEntity userEntity = new UserEntity();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
@@ -104,7 +128,7 @@ public class AdminController {
 
         if (bookEntity == null) throw new UserServiceException(AdminErrorMessages.NO_BOOK_FOUND.getAdminErrorMessages());
 
-        downloadService.downloadBook(user,bookId);
+        emailService.downloadBook(user,bookId);
         System.out.println("hai "+user.getFirstName()+ " " + user.getLastName());
         return "Thank you " + user.getFirstName() + user.getLastName() + " " + " Your book is downloaded successfully ";
     }
