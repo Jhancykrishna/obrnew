@@ -3,9 +3,11 @@ package com.sayone.obr.repository;
 import com.sayone.obr.entity.DownloadEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface DownloadRepository extends JpaRepository<DownloadEntity, Long> {
 
 
@@ -21,6 +23,9 @@ public interface DownloadRepository extends JpaRepository<DownloadEntity, Long> 
 
     @Query(value = "select book_name from book b where b.book_id = ?1",nativeQuery = true)
     String findBookName(Long bookId);
+
+    @Query(value = "select book_status from book b where b.book_id = ?1",nativeQuery = true)
+    String findByBookStatus(Long bookId);
 
 
 //

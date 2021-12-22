@@ -8,7 +8,7 @@ public class PublisherDetailsRequestModel {
     private String password;
     private long phoneNumber;
     private String address;
-    private String role;
+    private String role = "publisher";
 
     public String getRole() {
         return role;

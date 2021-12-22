@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="febin (generated)" id="1638182865008-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="admin"/>
+            </not>
+        </preConditions>
+        <createTable tableName="admin">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="admin_id" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="encrypted_password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="febin (generated)" id="1638182865008-2">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="book"/>
+            </not>
+        </preConditions>
+        <createTable tableName="book">
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_link" type="VARCHAR(255)"/>
+            <column name="book_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="genre" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publisher" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year_of_publication" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publisher_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="downloads"/>
+            </not>
+        </preConditions>
+        <createTable tableName="downloads">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dno" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uid" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="hibernate_sequence"/>
+            </not>
+        </preConditions>
+        <createTable tableName="hibernate_sequence">
+            <column name="next_val" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-5">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="publisher"/>
+            </not>
+        </preConditions>
+        <createTable tableName="publisher">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email_verification_status" type="BIT(1)"/>
+            <column name="email_verification_token" type="VARCHAR(255)"/>
+            <column name="encrypted_password" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publisher_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="reviews"/>
+            </not>
+        </preConditions>
+        <createTable tableName="reviews">
+            <column name="review_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="rating" type="INT"/>
+            <column name="book_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(120)"/>
+            <column name="email" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="encrypted_password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="phone_number" type="BIGINT"/>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_status" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="PRIMARY" tableName="admin"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="admin"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="PRIMARY" tableName="book"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="book_id" constraintName="PRIMARY" tableName="book"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-10">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="PRIMARY" tableName="downloads"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="downloads"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-11">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="PRIMARY" tableName="publisher"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="publisher"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-12">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="PRIMARY" tableName="reviews"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="review_id" constraintName="PRIMARY" tableName="reviews"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-13">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="PRIMARY" tableName="user"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-14">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="admin" indexName="UK_c0r9atamxvbhjjvy5j8da1kam"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint columnNames="email" constraintName="UK_c0r9atamxvbhjjvy5j8da1kam" tableName="admin"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-15">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists tableName="user" indexName="UK_ob8kqyqqgmefl0aco34akdtpe"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint columnNames="email" constraintName="UK_ob8kqyqqgmefl0aco34akdtpe" tableName="user"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-16">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKgiq1y1159fhcjfigdijlsvdx2" tableName="reviews"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKgiq1y1159fhcjfigdijlsvdx2" tableName="reviews">
+            <column name="book_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-17">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKpu9mq923kgnqudnhtub65xks" tableName="book"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKpu9mq923kgnqudnhtub65xks" tableName="book">
+            <column name="publisher_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-18">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="FKsdlcf7wf8l1k0m00gik0m6b1m" tableName="reviews"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="FKsdlcf7wf8l1k0m00gik0m6b1m" tableName="reviews">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-19">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKgiq1y1159fhcjfigdijlsvdx2"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="reviews" constraintName="FKgiq1y1159fhcjfigdijlsvdx2" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="book_id" referencedTableName="book"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-20">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKpu9mq923kgnqudnhtub65xks"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="publisher_id" baseTableName="book" constraintName="FKpu9mq923kgnqudnhtub65xks" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="febin (generated)" id="1638182865008-21">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FKsdlcf7wf8l1k0m00gik0m6b1m"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="reviews" constraintName="FKsdlcf7wf8l1k0m00gik0m6b1m" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+
+    <include file="changelog/changelog-0.xml"/>
+</databaseChangeLog>

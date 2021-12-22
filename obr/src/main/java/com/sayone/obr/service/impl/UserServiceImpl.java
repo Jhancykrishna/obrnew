@@ -2,14 +2,19 @@ package com.sayone.obr.service.impl;
 
 import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.UserEntity;
+import com.sayone.obr.exception.AdminErrorMessages;
 import com.sayone.obr.exception.ErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
+import com.sayone.obr.repository.UserPaginationRepository;
 import com.sayone.obr.repository.UserRepository;
 import com.sayone.obr.service.UserService;
 import com.sayone.obr.shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserPaginationRepository userPaginationRepository;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -123,9 +133,11 @@ public class UserServiceImpl implements UserService {
         UserDto returnValue = new UserDto();
         UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
-        if (userEntity == null) throw new IllegalStateException("Record not found");
+        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
+        if (Objects.equals(userDto.getFirstName(), "")) throw new UserServiceException(PublisherErrorMessages.MISSING_FIRST_NAME.getPublisherErrorMessages());
         userEntity.setFirstName(userDto.getFirstName());
+        if (Objects.equals(userDto.getLastName(), "")) throw new UserServiceException(PublisherErrorMessages.MISSING_LAST_NAME.getPublisherErrorMessages());
         userEntity.setLastName(userDto.getLastName());
 
         UserEntity updatedPublisherDetails = userRepository.save(userEntity);
@@ -135,47 +147,112 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deletePublisher(String userId) {
+    public String deletePublisher(String userId) throws UserServiceException {
         UserEntity userEntity = userRepository.findByPublisherId(userId,"publisher");
 
         if (userEntity == null) {
-            throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+            throw new UserServiceException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
         }
         userRepository.delete(userEntity);
+
+        return PublisherErrorMessages.DELETED_ACCOUNT.getPublisherErrorMessages();
     }
 
     @Override
-    public UserDto getAllPublishersByRole() {
+    public List<UserEntity> getAllPublishersByRole() {
 
-        UserEntity userEntity = userRepository.findAllByRole("publisher");
-        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        List<UserEntity> userEntity = userRepository.findAllByRole("publisher");
+        if (userEntity.isEmpty()) throw new UserServiceException(AdminErrorMessages.NO_PUBLISHERS_EXIST.getAdminErrorMessages());
 
-        UserDto returnValue = new UserDto();
-        BeanUtils.copyProperties(userEntity, returnValue);
+//        UserDto returnValue = new UserDto();
+//        BeanUtils.copyProperties(userEntity, returnValue);
 
+        return userEntity;
+    }
+
+    @Override
+    public List<UserEntity> getAllUsersByRole() {
+
+        List<UserEntity> userEntity = userRepository.findAllByRole("user");
+        if (userEntity == null) throw new IllegalStateException(AdminErrorMessages.NO_USERS_EXIST.getAdminErrorMessages());
+
+//        UserRestModel returnValue = new UserDto();
+//        BeanUtils.copyProperties(userRestModels, returnValue);
+
+        return userEntity;
+    }
+
+    @Override
+    public String deletePublisherByAdmin(Long id) throws UserServiceException {
+        UserEntity userEntity = userRepository.findById(id,"publisher");
+
+        if (userEntity == null) {
+            throw new UserServiceException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        }
+        userRepository.delete(userEntity);
+
+        return PublisherErrorMessages.DELETED_ACCOUNT.getPublisherErrorMessages();
+    }
+
+    @Override
+    public List<UserEntity> getAll(int page, int limit) {
+
+        List<UserEntity> returnValue = new ArrayList<>();
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<UserEntity> usersPage = userPaginationRepository.findAll(pageableRequest);
+        List<UserEntity> users = usersPage.getContent();
+
+        for(UserEntity userEntity: users) {
+            UserEntity user = new UserEntity();
+            user.setFirstName(userEntity.getFirstName());
+            user.setLastName(userEntity.getLastName());
+            user.setEmail(userEntity.getEmail());
+            user.setAddress(userEntity.getAddress());
+            user.setUserStatus(userEntity.getUserStatus());
+            user.setRole(userEntity.getRole());
+
+            BeanUtils.copyProperties(userEntity,user);
+            returnValue.add(user);
+
+        }
         return returnValue;
     }
 
     @Override
-    public UserDto getAllUsersByRole() {
+    public String viewProfile(Long id) {
 
-        UserEntity userEntity = userRepository.findAllByRole("user");
-        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        List<Object[]> objs = userRepository.findAllBooks(id);
 
-        UserDto returnValue = new UserDto();
-        BeanUtils.copyProperties(userEntity, returnValue);
+        Object[] obj = objs.get(0);
 
-        return returnValue;
+        String userFirstName = String.valueOf(obj[0]);
+        String userEmail = String.valueOf(obj[1]);
+        String userPhoneNumber = String.valueOf(obj[2]);
+        String userAddress = String.valueOf(obj[3]);
+        String bookName = String.valueOf(obj[4]);
+        String authorName = String.valueOf(obj[5]);
+        String yearOfPublication = String.valueOf(obj[6]);
+
+        return  "userFirstName=" + userFirstName + '\n' +
+                " userEmail=" + userEmail + '\n' +
+                " userPhoneNumber=" + userPhoneNumber + '\n' +
+                " userAddress=" + userAddress + '\n' +
+                " bookName=" + bookName + '\n' +
+                " authorName=" + authorName + '\n' +
+                " yearOfPublication=" + yearOfPublication +'\n';
     }
 
     @Override
-    public void deleteUser(String userId) {
+    public String deleteUserByAdmin(Long id) {
 
-        UserEntity userEntity = userRepository.findByPublisherId(userId,"user");
+        UserEntity userEntity = userRepository.findById(id,"user");
 
-        if (userEntity == null) throw new IllegalStateException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
+        if (userEntity == null) throw new UserServiceException(PublisherErrorMessages.NO_RECORD_FOUND.getPublisherErrorMessages());
 
         userRepository.delete(userEntity);
+
+        return PublisherErrorMessages.DELETED_ACCOUNT.getPublisherErrorMessages();
     }
 
     @Override

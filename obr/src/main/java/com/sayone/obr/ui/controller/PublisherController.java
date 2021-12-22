@@ -1,11 +1,13 @@
 package com.sayone.obr.ui.controller;
 
 import com.sayone.obr.dto.UserDto;
-import com.sayone.obr.exception.AdminErrorMessages;
 import com.sayone.obr.exception.PublisherErrorMessages;
+import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.model.request.PublisherDetailsRequestModel;
 import com.sayone.obr.model.response.PublisherRestModel;
 import com.sayone.obr.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,12 +23,14 @@ public class PublisherController {
     @Autowired
     UserService userService;
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
     @GetMapping("/publisher/get")
-    public PublisherRestModel getPublisher() throws Exception {
+    public PublisherRestModel getPublisher() throws UserServiceException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
-        if (!Objects.equals(user.getRole(), "publisher")) throw new Exception(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+        if (!Objects.equals(user.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
@@ -36,12 +40,36 @@ public class PublisherController {
         return returnValue;
     }
 
-    @PostMapping("publisher/signup")
-    public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws Exception {
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
+    @GetMapping("/publisher/viewprofile")
+    public String viewProfile() throws UserServiceException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDto user = userService.getUser(auth.getName());
+
+        if (!Objects.equals(user.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+
+        return userService.viewProfile(user.getId());
+    }
+
+//    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+//            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
+//    @GetMapping("/publisher/books")
+//    public List<BookRestModel> getbooks() throws UserServiceException {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        UserDto user = userService.getUser(auth.getName());
+//
+//        if (!Objects.equals(user.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+//
+//        return userMapper.getbooks(user.getId());
+//    }
+
+    @PostMapping("/publisher/signup")
+    public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws UserServiceException {
 
         PublisherRestModel returnValue = new PublisherRestModel();
 
-        if (publisherDetails.getFirstName().isEmpty()) throw new Exception(PublisherErrorMessages.MISSING_REQUIRED_FIELD.getPublisherErrorMessages());
+        if (publisherDetails.getFirstName().isEmpty()) throw new UserServiceException(PublisherErrorMessages.MISSING_REQUIRED_FIELD.getPublisherErrorMessages());
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(publisherDetails, userDto);
@@ -52,13 +80,15 @@ public class PublisherController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
     @PutMapping("/publisher/update")
-    public PublisherRestModel updatePublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws Exception {
+    public PublisherRestModel updatePublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws UserServiceException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
-        if (!Objects.equals(user.getRole(), "publisher")) throw new Exception(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+        if (!Objects.equals(user.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
 
         PublisherRestModel returnValue = new PublisherRestModel();
@@ -72,14 +102,16 @@ public class PublisherController {
         return returnValue;
     }
 
+    @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
+            value = "${publisherController.authorizationHeader.description}", paramType = "header")})
     @DeleteMapping("/publisher/delete")
-    public void deletePublisher() throws Exception {
+    public String deletePublisher() throws UserServiceException {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDto user = userService.getUser(auth.getName());
 
-        if (!Objects.equals(user.getRole(), "publisher")) throw new Exception(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
+        if (!Objects.equals(user.getRole(), "publisher")) throw new UserServiceException(PublisherErrorMessages.NO_PUBLISHER_FOUND.getPublisherErrorMessages());
 
-        userService.deletePublisher(user.getUserId());
+        return userService.deletePublisher(user.getUserId());
     }
 }
