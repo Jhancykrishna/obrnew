@@ -1,7 +1,6 @@
 package com.sayone.obr.repository;
 
 import com.sayone.obr.entity.UserEntity;
-import com.sayone.obr.entity.BookEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
-//publisher
+    //publisher
     @Query(value = "select * from user u where u.user_id = ?1 and u.role = ?2", nativeQuery = true)
     UserEntity findByPublisherId(String userId, String role);
 
