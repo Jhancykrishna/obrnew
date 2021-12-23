@@ -1,0 +1,25 @@
+
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Email</title>
+</head>
+<body>
+<div>Hi<b th:text="${userName}"></b></div>
+
+<!--<div> "Hi " + <b th:text="${user.userName}"></b> + " Sorry You've exceeded your download of this book.." +-->
+<!--    " If you want to continue your downloads and get more memberships please contact Admin. " +-->
+<!--    " Thank You.."</div>-->
+
+<div>Hi   <b th:text="${userName}"></b>  Sorry You've exceeded your download of this book..
+   If you want to continue your downloads and get more memberships please contact Admin.</div>
+<div> Thank You.. </div>
+
+
+</body>
+</html>
