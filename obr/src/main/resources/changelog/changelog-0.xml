@@ -21,7 +21,7 @@
             <column name="from_address" type="varchar(25)" />
             <column name="to_address" type="varchar(25)" />
             <column name="subject" type="varchar(25)" />
-            <column name="date" type="varchar(25)" />
+            <column name="date" type="varchar(50)" />
         </createTable>
     </changeSet>
 

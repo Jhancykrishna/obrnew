@@ -23,10 +23,10 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.time;
 
 
 @Service
@@ -84,7 +84,7 @@ public class EmailService {
         String fromAddress = "springobrtest@gmail.com";
         String senderName = "OBR";
         String toAddress = user.getEmail();
-        String date = time();
+        String date = String.valueOf(Calendar.getInstance().getTime());
 
         String bookLink = downloadRepository.findBooksLink(bookId);
         String bookName = downloadRepository.findBookName(bookId);
