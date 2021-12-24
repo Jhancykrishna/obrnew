@@ -7,4 +7,13 @@
             <column name="status" type="varchar(255)" />
         </addColumn>
     </changeSet>
+
+    <changeSet author="John" id="1638182865008-23">
+        <addColumn tableName="email_report">
+<!--            <column name="fromAddress" type="varchar(20)" />-->
+            <column name="toAddress" type="varchar(20)" />
+            <column name="subject" type="varchar(20)" />
+            <column name="date" type="date" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

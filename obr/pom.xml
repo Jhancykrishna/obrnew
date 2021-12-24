@@ -87,6 +87,15 @@
 			<artifactId>thymeleaf</artifactId>
 			<version>3.0.12.RELEASE</version>
 		</dependency>
+		<dependency>
+<!--			<groupId>org.liquibase</groupId>-->
+<!--			<artifactId>liquibase-maven-plugin</artifactId>-->
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-core</artifactId>
+
+
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -95,6 +104,14 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.liquibase</groupId>-->
+<!--				<artifactId>liquibase-maven-plugin</artifactId>-->
+<!--				<version>3.4.1</version>-->
+<!--				<configuration>-->
+<!--					<propertyFile>src/main/resources/application.properties</propertyFile>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
 		</plugins>
 	</build>
 

@@ -3,6 +3,7 @@ package com.sayone.obr.ui.controller;
 
 import com.sayone.obr.dto.UserDto;
 //import com.sayone.obr.entity.BookEntity;
+import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.entity.UserEntity;
 import com.sayone.obr.exception.DownloadErrors;
 import com.sayone.obr.exception.PublisherErrorMessages;
@@ -35,6 +36,9 @@ public class DownloadController {
     @Autowired
     UserService userService;
 
+//    @Autowired
+//    BookEntity bookEntity;
+
 
     @ApiImplicitParams({@ApiImplicitParam(name = "authorization",
             value = "${downloadController.authorizationHeader.description}", paramType = "header")})
@@ -48,7 +52,7 @@ public class DownloadController {
 
         if (!Objects.equals(user.getRole(), "user")) throw new UserServiceException(DownloadErrors.PUBLISHER_CANT_DOWNLOAD.getErrorMessage());
         
-        if (bookEntity == null) throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
+//        if (bookEntity == null) throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
 
 
         downloadService.downloadBook(user,bookId);
