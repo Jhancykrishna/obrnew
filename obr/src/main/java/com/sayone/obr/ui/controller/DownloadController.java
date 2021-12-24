@@ -2,10 +2,8 @@ package com.sayone.obr.ui.controller;
 
 
 import com.sayone.obr.dto.UserDto;
-//import com.sayone.obr.entity.BookEntity;
 import com.sayone.obr.entity.UserEntity;
 import com.sayone.obr.exception.DownloadErrors;
-import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.service.DownloadService;
 import com.sayone.obr.service.UserService;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 //import org.springframework.web.multipart.MultipartFile;
 
@@ -48,7 +45,7 @@ public class DownloadController {
 
         if (!Objects.equals(user.getRole(), "user")) throw new UserServiceException(DownloadErrors.PUBLISHER_CANT_DOWNLOAD.getErrorMessage());
         
-        if (bookEntity == null) throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
+//        if (bookEntity == null) throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
 
 
         downloadService.downloadBook(user,bookId);

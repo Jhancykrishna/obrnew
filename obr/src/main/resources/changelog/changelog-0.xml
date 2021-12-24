@@ -7,4 +7,31 @@
             <column name="status" type="varchar(255)" />
         </addColumn>
     </changeSet>
+
+    <changeSet author="John" id="1638182865008-23">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="email"/>
+            </not>
+        </preConditions>
+        <createTable tableName="email">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="from_address" type="varchar(25)" />
+            <column name="to_address" type="varchar(25)" />
+            <column name="subject" type="varchar(25)" />
+            <column name="date" type="varchar(25)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet author="John" id="1638182865008-24">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <primaryKeyExists primaryKeyName="PRIMARY" tableName="email"/>
+            </not>
+        </preConditions>
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="email"/>
+    </changeSet>
+
 </databaseChangeLog>
