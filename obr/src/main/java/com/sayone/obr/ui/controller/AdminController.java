@@ -128,7 +128,7 @@ public class AdminController {
 
         if (bookEntity == null) throw new UserServiceException(AdminErrorMessages.NO_BOOK_FOUND.getAdminErrorMessages());
 
-        emailService.downloadBook(user,bookId);
+        downloadService.downloadBook(user,bookId);
         System.out.println("hai "+user.getFirstName()+ " " + user.getLastName());
         return "Thank you " + user.getFirstName() + user.getLastName() + " " + " Your book is downloaded successfully ";
     }
