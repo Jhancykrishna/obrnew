@@ -1,13 +1,10 @@
 package com.sayone.obr.entity;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "downloads")
-@Component
 public class DownloadEntity implements Serializable {
 
     private static final long serialVersionUID = -8985931244509056697L;

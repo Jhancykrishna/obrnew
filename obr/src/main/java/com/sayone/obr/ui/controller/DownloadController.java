@@ -8,7 +8,7 @@ import com.sayone.obr.exception.DownloadErrors;
 import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.service.DownloadService;
-import com.sayone.obr.service.DownloadService1;
+
 import com.sayone.obr.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -19,11 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Objects;
-//import org.springframework.web.multipart.MultipartFile;
 
-//import java.io.IOException;
+import java.util.Objects;
+
 
 @RestController
 @RequestMapping("user")
@@ -31,8 +29,7 @@ public class DownloadController {
 
     @Autowired
     DownloadService downloadService;
-    @Autowired
-    DownloadService1 downloadService1;
+
     @Autowired
     UserService userService;
 
@@ -53,7 +50,7 @@ public class DownloadController {
 //        if (bookEntity == null) throw new UserServiceException(DownloadErrors.NO_BOOK_FOUND.getErrorMessage());
 
 
-        downloadService1.downloadBook(user, bookId);
+        downloadService.downloadBook(user, bookId);
         System.out.println("haI " + user.getFirstName() + user.getLastName());
         return "Thank you" + user.getFirstName() + user.getLastName() + " " + "Your book is downloaded successfully";
     }
