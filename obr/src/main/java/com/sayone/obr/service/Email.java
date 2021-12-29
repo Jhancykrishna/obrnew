@@ -3,6 +3,7 @@ package com.sayone.obr.service;
 import com.sayone.obr.dto.UserDto;
 
 import com.sayone.obr.entity.EmailEntity;
+import com.sayone.obr.model.request.UserDetailsRequestModel;
 import com.sayone.obr.property.EmailProperties;
 import com.sayone.obr.repository.DownloadRepository;
 import com.sayone.obr.repository.EmailRepository;
@@ -90,4 +91,6 @@ public class Email {
         emailRepository.save(emailReport);
 
     }
+
+
 }
