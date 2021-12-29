@@ -9,14 +9,9 @@ import com.sayone.obr.repository.BookRepository;
 import com.sayone.obr.repository.DownloadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -29,12 +24,7 @@ public class DownloadService {
     @Autowired
     DownloadRepository downloadRepository;
     @Autowired
-    JavaMailSender javaMailSender;
-    @Autowired
     BookRepository bookRepository;
-
-    @Autowired
-    TemplateEngine templateEngine;
 
     @Autowired
     EmailService emailService;
@@ -52,11 +42,6 @@ public class DownloadService {
         Optional<DownloadEntity> optionalDownload = downloadRepository.findByUserId(user.getUserId(), bookId);
         DownloadEntity downloadEntity = downloadRepository.findByUserAndBookId(user.getUserId(), bookId);
 
-        Context context = new Context();
-        context.setVariable("user", user);
-        context.setVariable("book", bookEntity);
-        context.setVariable("downloads", downloadEntity);
-
         String toAddress = user.getEmail();
         String date = String.valueOf(Calendar.getInstance().getTime());
 
@@ -67,26 +52,21 @@ public class DownloadService {
         String userName = user.getFirstName() + user.getLastName();
         System.out.println("user name is " + userName);
 
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         FileSystemResource file = new FileSystemResource(new File(bookLink));
 
+        long dno = downloadGet.getDno();
 
         if (optionalDownload.isPresent()) {
 
             downloadGet = optionalDownload.get();
-            long dno = downloadGet.getDno();
+            long downloadNo = downloadGet.getDno();
             System.out.println("this is dno " + dno);
-            long newDno = dno + 1L;
+            long newDno = downloadNo + 1L;
 
 
             if (newDno > 3) {
 
-                String process = templateEngine.process("emails/outOfDownloads", context);
-
-                String subject = "Out of Downloads! " + bookName;
-
-                emailService.sendEmail3(subject, process, toAddress, date, message, helper);
+                emailService.sendEmailOut(bookId, user, bookName, bookLink, toAddress, date, file, downloadEntity, bookEntity, newDno);
 
             } else {
                 System.out.println("new dno is" + newDno);
@@ -97,11 +77,7 @@ public class DownloadService {
 
                 Long dnoRemain = 3L - downloadGet.getDno();
 
-
-                String process = templateEngine.process("emails/downloadAgain", context);
-                String subject = "Here's your " + bookName + "!";
-
-                emailService.sendEmail2(subject, process, toAddress, bookLink, bookName, bookIdSend, date, message, file, helper);
+                emailService.sendEmailAgain(bookLink, bookName, bookId, user, toAddress, date, file, downloadEntity, bookEntity, newDno);
 
                 downloadRepository.save(downloadGet);
             }
@@ -118,10 +94,7 @@ public class DownloadService {
             //mail test
             Long bookIdSend = bookId;
 
-            String process = templateEngine.process("emails/initialDownload", context);
-            String subject = "Here's your " + bookName + " Enjoy!!";
-
-            emailService.sendEmail1(toAddress, subject, process, bookLink, bookName, date, message, file, helper);
+            emailService.sendEmailInitial(bookId, user, bookName, bookLink, toAddress, date, file, downloadEntity, bookEntity, dno);
 
             downloadRepository.save(downloads);
         }
