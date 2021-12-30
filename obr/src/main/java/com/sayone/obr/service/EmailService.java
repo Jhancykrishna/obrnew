@@ -37,10 +37,9 @@ public class EmailService {
     @Autowired
     AppProperties appProperties;
 
-    Context context = new Context();
-
     public void sendMail(UserDetailsRequestModel userDetails) throws MessagingException {
 
+        Context context = new Context();
         context.setVariable("user", userDetails);
         String process = templateEngine.process("emails/welcome", context);
         javax.mail.internet.MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -53,6 +52,7 @@ public class EmailService {
 
     void sendEmailInitial(Long bookId, UserDto user, String bookName, String bookLink, String toAddress, String date, FileSystemResource file, DownloadEntity downloadEntity, BookEntity bookEntity, long dno) throws MessagingException, UnsupportedEncodingException {
 
+        Context context = new Context();
         context.setVariable("user", user);
         context.setVariable("book", bookEntity);
         context.setVariable("downloads", downloadEntity);
@@ -68,6 +68,7 @@ public class EmailService {
 
     void sendEmailAgain(String bookLink, String bookName, Long bookId, UserDto user, String toAddress, String date, FileSystemResource file, DownloadEntity downloadEntity, BookEntity bookEntity, long newDno) throws MessagingException, UnsupportedEncodingException {
 
+        Context context = new Context();
         context.setVariable("user", user);
         context.setVariable("book", bookEntity);
         context.setVariable("downloads", downloadEntity);
@@ -81,6 +82,7 @@ public class EmailService {
 
     void sendEmailOut(Long bookId, UserDto user, String bookName, String bookLink, String toAddress, String date, FileSystemResource file, DownloadEntity downloadEntity, BookEntity bookEntity, long newDno) throws MessagingException, UnsupportedEncodingException {
 
+        Context context = new Context();
         context.setVariable("user", user);
         String process = templateEngine.process("emails/outOfDownloads", context);
         String subject = String.format(appProperties.getSubjectOut(),bookName);
