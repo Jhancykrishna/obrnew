@@ -12,6 +12,20 @@ public class AppProperties {
     public String getTokenSecret()
     {
         return  env.getProperty("tokenSecret");
-
+    }
+    public String getFromAddress() {
+        return  env.getProperty("fromAddress");
+    }
+    public String getSenderName(){
+        return env.getProperty("senderName");
+    }
+    public String getSubjectOut(){
+        return env.getProperty("subject.out");
+    }
+    public String getSubjectAgain(){
+        return env.getProperty("subject.again");
+    }
+    public String getSubjectInitial(){
+        return env.getProperty("subject.initial");
     }
 }

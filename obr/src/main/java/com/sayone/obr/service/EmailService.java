@@ -8,8 +8,8 @@ import com.sayone.obr.exception.DownloadErrors;
 import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.model.request.UserDetailsRequestModel;
 import com.sayone.obr.repository.EmailRepository;
+import com.sayone.obr.security.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -35,7 +35,7 @@ public class EmailService {
     JavaMailSender javaMailSender;
 
     @Autowired
-    private Environment env;
+    AppProperties appProperties;
 
     Context context = new Context();
 
@@ -57,7 +57,7 @@ public class EmailService {
         context.setVariable("book", bookEntity);
         context.setVariable("downloads", downloadEntity);
         String process = templateEngine.process("emails/initialDownload", context);
-        String subject = String.format(env.getProperty("subject.initial"),bookName);
+        String subject = String.format(appProperties.getSubjectInitial(),bookName);
         MimeMessage message = mime(toAddress, subject, process, bookName, file, user, bookId, dno);
         System.out.println("the file is " + file);
         System.out.println("1st mail");
@@ -72,7 +72,7 @@ public class EmailService {
         context.setVariable("book", bookEntity);
         context.setVariable("downloads", downloadEntity);
         String process = templateEngine.process("emails/downloadAgain", context);
-        String subject = String.format(env.getProperty("subject.again"),bookName);
+        String subject = String.format(appProperties.getSubjectAgain(),bookName);
         MimeMessage message = mime(toAddress, subject, process, bookName, file, user, bookId, newDno);
         System.out.println("the book id and file is " + file + " " + bookId + " " + bookLink);
         javaMailSender.send(message);
@@ -83,7 +83,7 @@ public class EmailService {
 
         context.setVariable("user", user);
         String process = templateEngine.process("emails/outOfDownloads", context);
-        String subject = String.format(env.getProperty("subject.out"),bookName);
+        String subject = String.format(appProperties.getSubjectOut(),bookName);
         MimeMessage message = mime(toAddress, subject, process, bookName, file, user, bookId, newDno);
         javaMailSender.send(message);
         emailReport(toAddress,subject,date);
@@ -94,7 +94,7 @@ public class EmailService {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom(env.getProperty("fromAddress"), env.getProperty("senderName"));
+        helper.setFrom(appProperties.getFromAddress(), appProperties.getSenderName());
         helper.setTo(toAddress);
         helper.setSubject(subject);
         helper.setText(process, true);
@@ -109,7 +109,7 @@ public class EmailService {
     private void emailReport(String toAddress, String subject, String date) {
 
         EmailEntity emailEntity = new EmailEntity();
-        emailEntity.setFromAddress(env.getProperty("fromAddress"));
+        emailEntity.setFromAddress(appProperties.getFromAddress());
         emailEntity.setToAddress(toAddress);
         emailEntity.setSubject(subject);
         emailEntity.setDate(date);
