@@ -11,7 +11,7 @@ public class DownloadEntity implements Serializable {
 
     @Id
     @GeneratedValue
-    private long Id;
+    private Long Id;
 
 
 
@@ -46,11 +46,11 @@ public class DownloadEntity implements Serializable {
         this.dno = dno;
     }
 
-    public long getId() {
+    public Long getId() {
         return Id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         Id = id;
     }
 
