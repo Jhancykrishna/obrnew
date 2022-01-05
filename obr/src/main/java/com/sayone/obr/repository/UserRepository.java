@@ -41,6 +41,6 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     void deleteByUserId(String userId);
 
-    @Query(value = "SELECT id,first_name as firstName,last_name as lastName,email,role FROM user ORDER BY ID DESC LIMIT 5", nativeQuery = true)
-    List<Map<String, Object>> newUsers();
+    @Query(value = "SELECT id,first_name as firstName,last_name as lastName,email,role, created_on as createdOn FROM user WHERE created_on >= ?1 ORDER BY id", nativeQuery = true)
+    List<Map<String, Object>> newUsers(String s);
 }

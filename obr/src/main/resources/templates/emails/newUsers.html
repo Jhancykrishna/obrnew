@@ -25,12 +25,14 @@
       <th>Name</th>
       <th>Email</th>
       <th>Role</th>
+      <th>Created On</th>
     </tr>
     <tr th:each="newUser : ${newUsers}">
       <td th:text="${newUser.id}"></td>
       <td th:text="${newUser.firstName}"></td>
       <td th:text="${newUser.email}"></td>
       <td th:text="${newUser.role}"></td>
+      <td th:text="${newUser.createdOn}"></td>
     </tr>
   </table>
 </div>

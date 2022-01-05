@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -39,6 +39,9 @@ public class UserEntity implements Serializable {
     @Column
     private String userStatus;
 
+    @Column
+    private String createdOn = String.valueOf(LocalDateTime.now());
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uid", orphanRemoval = true)
     private List<BookEntity> book = new ArrayList<>();
@@ -46,7 +49,7 @@ public class UserEntity implements Serializable {
     public UserEntity() {
     }
 
-    public UserEntity(String firstName, String lastName, String email, long phoneNumber, String role, String address, String userStatus) {
+    public UserEntity(String firstName, String lastName, String email, long phoneNumber, String role, String address, String userStatus, String createdOn) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -54,6 +57,7 @@ public class UserEntity implements Serializable {
         this.role = role;
         this.address = address;
         this.userStatus = userStatus;
+        this.createdOn = createdOn;
     }
 
     public Long getId() {
@@ -143,5 +147,13 @@ public class UserEntity implements Serializable {
 
     public void setBook(List<BookEntity> book) {
         this.book = book;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
     }
 }

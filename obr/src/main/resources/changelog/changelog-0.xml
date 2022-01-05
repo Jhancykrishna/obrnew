@@ -34,4 +34,10 @@
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="email"/>
     </changeSet>
 
+    <changeSet author="John" id="1638182865008-25">
+        <addColumn tableName="user">
+            <column name="created_on" type="varchar(150)" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

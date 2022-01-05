@@ -20,6 +20,7 @@ import org.thymeleaf.context.Context;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +89,7 @@ public class EmailJob extends QuartzJobBean {
     private void newUsers(String fromEmail, String toEmail) {
         try {
             logger.info("Sending Email to {}", toEmail);
-            List<Map<String,Object>> newUsers = userRepository.newUsers();
+            List<Map<String,Object>> newUsers = userRepository.newUsers(String.valueOf(LocalDate.now()));
 
             Context context = new Context();
             context.setVariable("newUsers", newUsers);
