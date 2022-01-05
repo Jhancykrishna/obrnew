@@ -9,6 +9,15 @@ public class UserDetailsRequestModel {
     private long phoneNumber;
     private String userStatus;
     private String role;
+    private String dateCreated;
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
     public String getRole() {
         return role;

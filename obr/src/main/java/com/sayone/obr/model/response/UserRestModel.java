@@ -8,6 +8,7 @@ public class UserRestModel {
         private long phoneNumber;
         private String userStatus;
         private String role;
+        private String dateCreated;
 
         public String getRole() {
                 return role;
@@ -55,5 +56,13 @@ public class UserRestModel {
 
         public void setUserStatus(String userStatus) {
                 this.userStatus = userStatus;
+        }
+
+        public String getDateCreated() {
+                return dateCreated;
+        }
+
+        public void setDateCreated(String dateCreated) {
+                this.dateCreated = dateCreated;
         }
 }

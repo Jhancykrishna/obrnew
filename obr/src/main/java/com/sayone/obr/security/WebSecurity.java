@@ -23,7 +23,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL, SecurityConstants.PUB_SIGN_UP_URL, SecurityConstants.ADMIN_SIGN_UP_URL)
+                .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL, SecurityConstants.PUB_SIGN_UP_URL,
+                        SecurityConstants.ADMIN_SIGN_UP_URL, SecurityConstants.JOB_SCHEDULE_URL)
                 .permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
                 .permitAll()
@@ -32,7 +33,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .addFilter(new AuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
     }
+
+
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -47,4 +52,5 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         return filter;
 
     }
+
 }
