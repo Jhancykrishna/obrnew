@@ -37,4 +37,8 @@ public class AppProperties {
     public String getSubjectDownload() {
         return env.getProperty("subject.download");
     }
+
+    public String getSubjectNewUsers() {
+        return env.getProperty("subject.newUsers");
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -39,4 +40,7 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     Optional<UserEntity> findById(Long Id);
 
     void deleteByUserId(String userId);
+
+    @Query(value = "SELECT id,first_name as firstName,last_name as lastName,email,role FROM user ORDER BY ID DESC LIMIT 5", nativeQuery = true)
+    List<Map<String, Object>> newUsers();
 }

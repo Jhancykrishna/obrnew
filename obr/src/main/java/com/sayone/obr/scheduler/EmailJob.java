@@ -50,14 +50,20 @@ public class EmailJob extends QuartzJobBean {
         logger.info("Executing Job with key {}", jobExecutionContext.getJobDetail().getKey());
 
         JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap();
-//        String subject = jobDataMap.getString("subject");
+        String subject = jobDataMap.getString("subject");
 //        String body = jobDataMap.getString("body");
         String recipientEmail = jobDataMap.getString("email");
 
-        sendMail(mailProperties.getUsername(), recipientEmail);
+        if (subject.toLowerCase().contains("downloads")) {
+            mostDownloads(mailProperties.getUsername(), recipientEmail);
+
+        }
+        else if(subject.toLowerCase().contains("users")) {
+            newUsers(mailProperties.getUsername(), recipientEmail);
+        }
     }
 
-    private void sendMail(String fromEmail, String toEmail) {
+    private void mostDownloads(String fromEmail, String toEmail) {
         try {
             logger.info("Sending Email to {}", toEmail);
             List<Map<String,Object>> mostDownloads = downloadRepository.mostDownload();
@@ -69,6 +75,28 @@ public class EmailJob extends QuartzJobBean {
 
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, StandardCharsets.UTF_8.toString());
             messageHelper.setSubject(appProperties.getSubjectDownload());
+            messageHelper.setText(body, true);
+            messageHelper.setFrom(fromEmail);
+            messageHelper.setTo(toEmail);
+
+            mailSender.send(message);
+        } catch (MessagingException ex) {
+            logger.error("Failed to send email to {}", toEmail);
+        }
+    }
+
+    private void newUsers(String fromEmail, String toEmail) {
+        try {
+            logger.info("Sending Email to {}", toEmail);
+            List<Map<String,Object>> newUsers = userRepository.newUsers();
+
+            Context context = new Context();
+            context.setVariable("newUsers", newUsers);
+            String body = templateEngine.process("emails/newUsers", context);
+            MimeMessage message = mailSender.createMimeMessage();
+
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, StandardCharsets.UTF_8.toString());
+            messageHelper.setSubject(appProperties.getSubjectNewUsers());
             messageHelper.setText(body, true);
             messageHelper.setFrom(fromEmail);
             messageHelper.setTo(toEmail);
