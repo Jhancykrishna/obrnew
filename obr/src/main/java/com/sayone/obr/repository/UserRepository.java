@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -27,6 +29,12 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     @Query(value = "select u.first_name,u.email,u.phone_number,u.address,b.book_name,b.author,b.year_of_publication from user u left join book b on u.id = :id and u.id = b.publisher_id", nativeQuery = true)
     List<Object[]> findAllBooks(@Param("id")Long id);
+
+    @Query(value = "select u.first_name from user u where u.date_created >= ?1", nativeQuery = true)
+    List<Map<String,Object>> findUsersByDate(Date date);
+
+//    @Query("select u.firstName from UserEntity u where u.dateCreated < :date")
+//    List<Map<String,Object>> findUsersByDate(@Param("date") Date date);
 
     //user
     UserEntity findByEmail(String email);

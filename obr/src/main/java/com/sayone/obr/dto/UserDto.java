@@ -21,6 +21,15 @@ public class UserDto implements Serializable {
     private String encryptedPassword;
     private String address;
     private String role;
+    private String dateCreated;
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
     public String getRole() {
         return role;

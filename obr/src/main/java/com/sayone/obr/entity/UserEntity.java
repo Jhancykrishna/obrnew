@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -20,6 +20,9 @@ public class UserEntity implements Serializable {
     private Long Id;
     @Column(name = "user_id", nullable = false, length = 50)
     private String userId;
+    @Column(name = "date_created")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreated;
     @Column(length = 50)
     private String firstName;
     @Column(length = 50)
@@ -30,6 +33,19 @@ public class UserEntity implements Serializable {
     private String encryptedPassword;
     @Column(length = 25)
     private long phoneNumber;
+
+    public UserEntity(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
     @Column(nullable = false)
     private String role;
 
