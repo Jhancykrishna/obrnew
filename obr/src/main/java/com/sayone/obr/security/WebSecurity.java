@@ -24,7 +24,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL, SecurityConstants.PUB_SIGN_UP_URL,
-                        SecurityConstants.ADMIN_SIGN_UP_URL, SecurityConstants.JOB_SCHEDULE_URL)
+                        SecurityConstants.ADMIN_SIGN_UP_URL, SecurityConstants.JOB_SCHEDULE_URL,SecurityConstants.TIMEZONE_URL)
                 .permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
                 .permitAll()

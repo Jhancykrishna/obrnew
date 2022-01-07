@@ -24,6 +24,8 @@ public class UserEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
     @Column(length = 50)
+    private String timeZone;
+    @Column(length = 50)
     private String firstName;
     @Column(length = 50)
     private String lastName;
@@ -60,6 +62,18 @@ public class UserEntity implements Serializable {
     private List<BookEntity> book = new ArrayList<>();
 
     public UserEntity() {
+    }
+
+    public UserEntity(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 
     public UserEntity(String firstName, String lastName, String email, long phoneNumber, String role, String address, String userStatus) {

@@ -27,5 +27,7 @@ public class AppProperties {
      public String getSubject3(){
         return env.getProperty("subject3");
      }
-
+    public String getSubject4(){
+        return env.getProperty("subject4");
+    }
 }
