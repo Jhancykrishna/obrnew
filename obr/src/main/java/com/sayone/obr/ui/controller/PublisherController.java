@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.Objects;
 
 @RestController
@@ -65,7 +66,7 @@ public class PublisherController {
 //    }
 
     @PostMapping("/publisher/signup")
-    public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws UserServiceException {
+    public PublisherRestModel createPublisher(@RequestBody PublisherDetailsRequestModel publisherDetails) throws UserServiceException, MessagingException {
 
         PublisherRestModel returnValue = new PublisherRestModel();
 

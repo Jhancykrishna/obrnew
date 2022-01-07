@@ -40,4 +40,17 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="John" id="1638182865008-26">
+        <modifyDataType
+                columnName="created_on"
+                newDataType="datetime"
+                tableName="user"/>
+    </changeSet>
+
+    <changeSet author="John" id="1638182865008-27">
+        <addColumn tableName="user">
+            <column name="time_zone" type="varchar(50)" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

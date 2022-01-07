@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +40,10 @@ public class UserEntity implements Serializable {
     private String userStatus;
 
     @Column
-    private String createdOn = String.valueOf(LocalDateTime.now());
+    private ZonedDateTime createdOn = ZonedDateTime.now();
+
+    @Column
+    private String timeZone;
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "uid", orphanRemoval = true)
@@ -49,7 +52,7 @@ public class UserEntity implements Serializable {
     public UserEntity() {
     }
 
-    public UserEntity(String firstName, String lastName, String email, long phoneNumber, String role, String address, String userStatus, String createdOn) {
+    public UserEntity(String firstName, String lastName, String email, long phoneNumber, String role, String address, String userStatus, ZonedDateTime createdOn, String timeZone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -58,6 +61,7 @@ public class UserEntity implements Serializable {
         this.address = address;
         this.userStatus = userStatus;
         this.createdOn = createdOn;
+        this.timeZone = timeZone;
     }
 
     public Long getId() {
@@ -149,11 +153,19 @@ public class UserEntity implements Serializable {
         this.book = book;
     }
 
-    public String getCreatedOn() {
+    public ZonedDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(ZonedDateTime createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 }

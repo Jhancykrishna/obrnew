@@ -4,12 +4,13 @@ import com.sayone.obr.dto.UserDto;
 import com.sayone.obr.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
    //user
-    UserDto createUser(UserDto user);
+    UserDto createUser(UserDto user) throws MessagingException;
 
     UserDto getUser(String email);
 

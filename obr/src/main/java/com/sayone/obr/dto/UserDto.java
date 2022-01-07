@@ -1,7 +1,6 @@
 package com.sayone.obr.dto;
 
 
-
 import java.io.Serializable;
 
 
@@ -21,6 +20,7 @@ public class UserDto implements Serializable {
     private String encryptedPassword;
     private String address;
     private String role;
+    private String timeZone;
 
     public String getRole() {
         return role;
@@ -109,5 +109,13 @@ public class UserDto implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 }

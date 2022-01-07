@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+
 @RestController
 
 public class UserController {
@@ -42,7 +44,7 @@ public class UserController {
 
 
     @PostMapping("users/signup")
-    public UserRestModel createUser(@RequestBody UserDetailsRequestModel userDetails) {
+    public UserRestModel createUser(@RequestBody UserDetailsRequestModel userDetails) throws MessagingException {
         UserRestModel returnValue = new UserRestModel();
 
         if (userDetails.getFirstName().isEmpty())

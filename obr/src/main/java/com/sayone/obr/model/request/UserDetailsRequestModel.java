@@ -9,6 +9,7 @@ public class UserDetailsRequestModel {
     private long phoneNumber;
     private String userStatus;
     private String role;
+    private String timeZone;
 
     public String getRole() {
         return role;
@@ -64,5 +65,13 @@ public class UserDetailsRequestModel {
 
     public void setUserStatus(String userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 }

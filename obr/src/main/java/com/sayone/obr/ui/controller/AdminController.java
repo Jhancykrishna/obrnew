@@ -134,7 +134,7 @@ public class AdminController {
     }
 
     @PostMapping("admin/signup")
-    public AdminRestModel createAdmin(@RequestBody AdminDetailsRequestModel adminDetails) throws UserServiceException {
+    public AdminRestModel createAdmin(@RequestBody AdminDetailsRequestModel adminDetails) throws UserServiceException, MessagingException {
 
         AdminRestModel returnValue = new AdminRestModel();
 

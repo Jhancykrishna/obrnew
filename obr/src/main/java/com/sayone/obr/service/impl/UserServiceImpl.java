@@ -8,6 +8,7 @@ import com.sayone.obr.exception.PublisherErrorMessages;
 import com.sayone.obr.exception.UserServiceException;
 import com.sayone.obr.repository.UserPaginationRepository;
 import com.sayone.obr.repository.UserRepository;
+import com.sayone.obr.service.EmailService;
 import com.sayone.obr.service.UserService;
 import com.sayone.obr.shared.Utils;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,10 +43,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    EmailService emailService;
+
 
     //user
     @Override
-    public UserDto createUser(UserDto user) {
+    public UserDto createUser(UserDto user) throws MessagingException {
 
         if (userRepository.findByEmail(user.getEmail()) !=null)
             throw new UserServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
@@ -64,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(storedUserDetails, returnValue);
+        emailService.welcomeMail(storedUserDetails);
         return returnValue;
 
     }

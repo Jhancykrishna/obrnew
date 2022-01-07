@@ -90,7 +90,6 @@ public class EmailJob extends QuartzJobBean {
         try {
             logger.info("Sending Email to {}", toEmail);
             List<Map<String,Object>> newUsers = userRepository.newUsers(String.valueOf(LocalDate.now()));
-
             Context context = new Context();
             context.setVariable("newUsers", newUsers);
             String body = templateEngine.process("emails/newUsers", context);

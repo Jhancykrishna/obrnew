@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Welcome Email</title>
+</head>
+<body>
+<div>Welcome <b th:text="${welcome.firstName}"></b> <b th:text="${welcome.lastName}"></b></div>
+
+<div> Your account is created on <b th:text="${timeZone}"></b></div>
+
+<div> Your email is <b th:text="${welcome.email}"></b></div>
+
+</body>
+</html>
